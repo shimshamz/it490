@@ -1,0 +1,98 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>Authentication Form</title>
+		<meta charset="UTF-8"/>
+
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				background-color: #333333;
+			}
+
+			.container {
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+			}
+
+			.login, .register {
+				width: 40%;
+				height: 450px;
+				padding: 30px;
+				float: left;
+				border-radius: 20px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.login {
+				background-color: #b5d1ff;
+			}
+
+			.register {
+				background-color: #ccffa5;
+			}
+
+			h1 {
+				margin-bottom: 20px;
+			}
+
+			label, input {
+				display: block;
+			}
+
+			input {
+				margin-bottom: 10px;
+			}
+
+			.button {
+				padding: 5px 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+		<div class="login">
+			<h1>Login</h1>
+			<form method="post" action="login.php">
+				<label for="email">Email</label>
+				<input type="text" id="email" name="email">
+
+				<label for="password">Password</label>
+				<input type="text" id="password" name="pass">
+
+				<input type="submit" class="button" value="Login">
+			</form>
+		</div>
+
+		<div class="register">
+			<h1>Register</h1>
+			<form method="post" action="register.php">
+				<label for="firstname">First Name</label>
+				<input type="text" id="firstname" name="fname">
+
+				<label for="lastname">Last Name</label>
+				<input type="text" id="lastname" name="lname">
+
+				<label for="newemail">Email</label>
+				<input type="text" id="newemail" name="email">
+
+				<label for="newpassword">Password</label>
+				<input type="text" id="newpassword" name="pass">
+				
+				<input type="submit" class="button" value="Register">
+			</form>
+		</div> 
+		</div>
+	</body>
+</html>
+
