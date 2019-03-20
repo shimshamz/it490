@@ -480,14 +480,3 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
 </body>
 
 </html>
-
-<?php
-$search_input = $_POST['search'];
-
-if (isset($_POST['search']) && !empty($_POST['search'])) {
-  $searchname = preg_replace('/\s+/', '+', $search_input);
-  //search
-  $json_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=".$search_input."");
-}
-
-?>
