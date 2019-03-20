@@ -17,7 +17,7 @@ create database stocks;
 	use stocks;
 	create TABLE portfolio
 		(
-			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, dashboard_id int References dashboard(id), comany_symbol char(25), company_name varchar(255), volume int, buy_date date, buy_amnt decimal(10,2), current_amnt decimal(10,2), sell_date date, sell_amnt(10,2), P_L decimal (10,2)
+			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, dashboard_id int References dashboard(id), comany_symbol char(25), company_name varchar(255), volume int, buy_date date, buy_amnt decimal(10,2), current_amnt decimal(10,2), sell_date date, sell_amnt(10,2)
 		);
 
 /* changed table names portfolio->dashboard and company->portfolio as it was getting a bit confusing
@@ -26,3 +26,4 @@ create database stocks;
    Balance->balance
    removed age from user table
    added sell amnt and date in portfolio
+   took out P_L from portfolio
