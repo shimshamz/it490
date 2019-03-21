@@ -25,7 +25,7 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Search</title>
+  <title>Search Results</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -401,9 +401,9 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
                 ?>
 
                 <div class="my-2"></div>
-                <button onclick="location.href='buy.php'" class="btn btn-primary">
+                <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary">
                   <span class="text">Buy</span>
-                </button>
+                </a>
                 <button onclick="location.href='sell.php'" class="btn btn-danger">
                   <span class="text">Sell</span>
                 </button>
@@ -455,6 +455,31 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-primary" href="login.php">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy Modal-->
+  <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Buy</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>How many shares would like to buy?</p>
+          <div class="my-2"></div>
+          <form method="POST" action="buy.php">
+            <input type="number" name="buy">
+            <input type="submit" class="btn btn-primary" value="Buy">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
