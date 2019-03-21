@@ -1,7 +1,18 @@
 <?php
 session_start();
 $userid = $_SESSION['userid'];
-//ERROR LOGGING
+
+$mydb = new mysqli('127.0.0.1','admin','password','stocks');
+if ($mydb->errno != 0)
+{
+        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
+        exit(0);
+}
+echo "successfully connected to database".PHP_EOL;
+
+$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
+
+$currBal = $dash_info['balance'];
 ?>
 
 <!DOCTYPE html>
@@ -366,23 +377,6 @@ $userid = $_SESSION['userid'];
 
           <!-- Content Row -->
           <div class="row">
-
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Profit/Loss</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">+ $1107.25</div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <!-- Earnings (Monthly) Card Example -->
             <div class="col-xl-4 col-md-6 mb-4">
