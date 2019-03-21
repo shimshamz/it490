@@ -12,6 +12,16 @@ if (isset($_POST['search']) && !empty($_POST['search'])) {
 }
 
 $jsonarray = json_decode($json_string, true); //convert json into multidimensional associative array
+
+date_default_timezone_set('America/New_York');
+
+$sevenDaysAgo = date('Ymd', strtotime('-7 days'));
+$yesterday = date('Ymd', strtotime('yesterday'));
+
+$history_string = file_get_contents("https://marketdata.websol.barchart.com/getHistory.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbol=".$search_input."&type=daily&startDate=".$sevenDaysAgo."&endDate=".$yesterday."&order=desc");
+
+$historyarray = json_decode($history_string, true);
+
 ?>
 
 <!DOCTYPE html>
@@ -180,9 +190,9 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form method="post" action="searchresults.php" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search symbol..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -390,75 +400,119 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
                   <h6 class="m-0 font-weight-bold text-primary"><?php echo "<strong>$name ($symbol)</strong> <br>"; ?></h6>
                 </div>
                 <div class="card-body">
-                  <div class="row">
-                    <p><?php echo "Price Status : $mode"; ?> </p>
-                  </div>
+                    <div class="row">
+                      <div class="col-lg-8">
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                  <h6 class="m-0 font-weight-bold text-primary">Open</h6>
+                                </div>
+                                <div class="card-body">
+                                  <p><?php echo "$$open"; ?></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-6">
+                              <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                  <h6 class="m-0 font-weight-bold text-primary">High</h6>
+                                </div>
+                                <div class="card-body">
+                                  <p><?php echo "$$high"; ?></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <thead>
+                                    <tr>
+                                      <th>Day of Week</th>
+                                      <th>Date</th>
+                                      <th>Close Price</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                  <!-- The BELOW can be removed once connected to backend (it's just some fake data) -->
+                                    <?php
 
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">Price</h6>
-                        </div>
-                        <div class="card-body">
-                          <p><?php echo "$$lastPrice"; ?> </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">Percentage Change</h6>
-                        </div>
-                        <div class="card-body">
-                          <p><?php echo "$percentChange"; ?> </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">Volume</h6>
-                        </div>
-                        <div class="card-body">
-                          <p><?php echo "$volume"; ?> </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                                    foreach ($historyarray['results'] as $day) { 
+                                      $dayName = date('l', strtotime($day['tradingDay']));
+                                      $date = date('m-d-Y', strtotime($day['tradingDay']));
+                                      ?>
+                                      <tr>
+                                        <td><?php echo $dayName; ?></td>
+                                        <td><?php echo $date; ?></td>
+                                        <td><?php echo "$".$day['close']; ?></td>
+                                      </tr>
+                                    <?php
 
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">Open</h6>
+                                    }
+
+                                    ?>
+                                  <!-- The ABOVE can be removed once connected to backend -->
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card shadow mb-4">
+                              <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Low</h6>
+                              </div>
+                              <div class="card-body">
+                                <p><?php echo "$$low"; ?></p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div class="card-body">
-                          <p><?php echo "$$open"; ?></p>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card shadow mb-4">
+                              <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Price <?php echo "($mode)"; ?> </h6>
+                              </div>
+                              <div class="card-body">
+                                <p><?php echo "$$lastPrice"; ?> </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card shadow mb-4">
+                              <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Percentage Change</h6>
+                              </div>
+                              <div class="card-body">
+                                <p><?php echo "$percentChange%"; ?> </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="card shadow mb-4">
+                              <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Volume</h6>
+                              </div>
+                              <div class="card-body">
+                                <p><?php echo "$volume"; ?> </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">High</h6>
-                        </div>
-                        <div class="card-body">
-                          <p><?php echo "$$high"; ?></p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-4">
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                          <h6 class="m-0 font-weight-bold text-primary">Low</h6>
-                        </div>
-                        <div class="card-body">
-                          <p><?php echo "$$low"; ?></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                       
                 <?php
 
