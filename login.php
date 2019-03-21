@@ -29,7 +29,16 @@ if ($response == 0 ) {
 header("location:loginerror.html");
 }
 else {
-	$_SESSION['username']= $_POST['username'];
-	header("location:kumartest1.php");
+	$mydb = new mysqli('127.0.0.1','admin','password','stocks');
+	if ($mydb->errno != 0)
+	{
+	        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
+	        exit(0);
+	}
+	echo "successfully connected to database".PHP_EOL;
+	$email = $_POST['email'];
+	$query = mysqli_query($mydb,"SELECT id FROM user WHERE email=$email");
+	$_SESSION['userid'] = $query['id'];
+	header("Location: index.php");
 }
 ?>
