@@ -1,6 +1,6 @@
 <?php
 session_start();
-$username = $_SESSION['username'];
+$userid = $_SESSION['userid'];
 //ERROR LOGGING
 ?>
 
