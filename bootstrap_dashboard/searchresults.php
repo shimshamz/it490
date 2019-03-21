@@ -369,6 +369,14 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
                 $symbol = $test["symbol"];
                 $name = $test["name"];
                 $mode = $test["mode"];
+                if ($mode == 'i') {
+                  $mode = 'Delayed';
+                } elseif ($mode == 'd') {
+                  $mode = 'End of Day';
+                } elseif ($mode == 'r') {
+                  $mode = 'Real-time';
+                }
+
                 $lastPrice = $test["lastPrice"];
                 $percentChange = $test["percentChange"];
                 $open = $test["open"];
@@ -382,16 +390,76 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
                   <h6 class="m-0 font-weight-bold text-primary"><?php echo "<strong>$name ($symbol)</strong> <br>"; ?></h6>
                 </div>
                 <div class="card-body">
-                  <p><?php echo "Price: $$lastPrice"; ?> </p>
-                  <p><?php echo "Mode : $mode"; ?> </p>
-                  <!-- #echo "Last Price : $$lastPrice <br>"; -->
-                  <p><?php echo "Percentage Change : $percentChange"; ?> </p>
-                  <p><?php echo "Open : $$open"; ?> </p>
-                  <p><?php echo "High : $$high"; ?> </p>
-                  <p><?php echo "Low : $$low"; ?> </p>
-                  <!-- <p><?php #echo "Close : $$close"; ?> </p> -->
-                  <p><?php echo "Volume : $volume"; ?> </p>
-                
+                  <div class="row">
+                    <p><?php echo "Price Status : $mode"; ?> </p>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">Price</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$$lastPrice"; ?> </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">Percentage Change</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$percentChange"; ?> </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">Volume</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$volume"; ?> </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">Open</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$$open"; ?></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">High</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$$high"; ?></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">Low</h6>
+                        </div>
+                        <div class="card-body">
+                          <p><?php echo "$$low"; ?></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                      
                 <?php
 
                 $_SESSION['symbol'] = $symbol;
@@ -400,13 +468,14 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
 
                 ?>
 
-                <div class="my-2"></div>
-                <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary">
-                  <span class="text">Buy</span>
-                </a>
-                <button onclick="location.href='sell.php'" class="btn btn-danger">
-                  <span class="text">Sell</span>
-                </button>
+                <div class="row justify-content-around">
+                  <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary btn-lg col-3">
+                    <span class="text">Buy</span>
+                  </a>
+                  <button onclick="location.href='sell.php'" class="btn btn-danger btn-lg col-3">
+                    <span class="text">Sell</span>
+                  </button>
+                </div>
 
                   </div>
                 </div>
