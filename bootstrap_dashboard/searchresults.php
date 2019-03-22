@@ -2,12 +2,15 @@
 session_start();
 $username = $_SESSION['username'];
 
+$symbol = 'USD ($)';
+
 date_default_timezone_set('America/New_York');
 $sevenDaysAgo = date('Ymd', strtotime('-7 days'));
 $yesterday = date('Ymd', strtotime('yesterday'));
 
+$search_input = $_GET['search'];
+
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-  $search_input = $_GET['search'];
   $searchname = preg_replace('/\s+/', '+', $search_input);
   //search
   $json_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=".$search_input."");
@@ -16,39 +19,6 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
 
 $jsonarray = json_decode($json_string, true); //convert json into multidimensional associative array
 $historyarray = json_decode($history_string, true);
-
-if (isset($_GET['currency']) && !empty($_GET['currency'])) {
-  currencyconverter($_GET['currency']);
-}
-else {
-  $exchangeRate = 1;
-  $symbol = 'USD ($)';
-  $currency = 'usd';
-}
-
-function currencyconverter($symbol) {
-  if ($symbol == 'usd') {
-    $exchangeRate = 1;
-    $symbol = 'USD ($)';
-    $currency = 'usd';
-  }
-  else if ($symbol == 'gbp') {
-    $forex_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=^GBPUSD");
-    $forexarray = json_decode($forex_string, true);
-    $value = $forexarray['results'][0]['lastPrice'];
-    $exchangeRate = $value;
-    $symbol = 'GBP (&pound;)';
-    $currency = 'gbp';
-  }
-  else if ($symbol == 'eur') {
-    $forex_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=^EURUSD");
-    $forexarray = json_decode($forex_string, true);
-    $value = round($forexarray['results']['lastPrice'], 2);
-    $exchangeRate = $value;
-    $symbol = 'EUR (&euro;)';
-    $currency = 'eur';
-  }
-}
 
 ?>
 
@@ -71,6 +41,12 @@ function currencyconverter($symbol) {
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+  <!-- JQuery CDN-->
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
 
 </head>
 
@@ -401,12 +377,12 @@ function currencyconverter($symbol) {
             <h1 class="h3 mb-0 text-gray-800">Search Results</h1>
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Currency: <?php echo $symbol; ?>
+                Currency: <span class="currCurrency"><?php echo $symbol; ?></span>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="searchresults.php?currency=usd">USD ($)</a>
-                <?php echo '<a class="dropdown-item" href="searchresults.php?search='.$search_input.'&currency=gbp">GBP (&pound;)</a>'; ?>
-                <a class="dropdown-item" href="searchresults.php?currency=eur">EUR (&euro;)</a>
+                <button class="dropdown-item" onclick="currencyconverter('usd', '<?php echo $search_input;?>')">USD ($)</button>
+                <button class="dropdown-item" onclick="currencyconverter('gbp', '<?php echo $search_input;?>')">GBP (&pound;)</button>
+                <button class="dropdown-item" onclick="currencyconverter('eur', '<?php echo $search_input;?>')">EUR (&euro;)</button>
               </div>
             </div>
           </div>
@@ -427,12 +403,12 @@ function currencyconverter($symbol) {
                   $mode = 'Real-time';
                 }
 
-                $lastPrice = $test["lastPrice"] * $exchangeRate;
+                $lastPrice = $test["lastPrice"];
                 $percentChange = $test["percentChange"];
-                $open = $test["open"] * $exchangeRate;
-                $high = $test["high"] * $exchangeRate;
-                $low = $test["low"] * $exchangeRate;
-                $close = $test["close"] * $exchangeRate;
+                $open = $test["open"];
+                $high = $test["high"];
+                $low = $test["low"];
+                $close = $test["close"];
                 $volume = $test["volume"];
               ?>
               <div class="card shadow mb-4">
@@ -449,7 +425,7 @@ function currencyconverter($symbol) {
                                   <h6 class="m-0 font-weight-bold text-primary">Open</h6>
                                 </div>
                                 <div class="card-body">
-                                  <p><?php echo "$$open"; ?></p>
+                                  <p><span class="symbol">$</span><span class="money"><?php echo "$open"; ?></span></p>
                                 </div>
                               </div>
                             </div>
@@ -459,7 +435,7 @@ function currencyconverter($symbol) {
                                   <h6 class="m-0 font-weight-bold text-primary">High</h6>
                                 </div>
                                 <div class="card-body">
-                                  <p><?php echo "$$high"; ?></p>
+                                  <p><span class="symbol">$</span><span class="money"><?php echo "$high"; ?></span></p>
                                 </div>
                               </div>
                             </div>
@@ -510,7 +486,7 @@ function currencyconverter($symbol) {
                                 <h6 class="m-0 font-weight-bold text-primary">Low</h6>
                               </div>
                               <div class="card-body">
-                                <p><?php echo "$$low"; ?></p>
+                                <p><span class="symbol">$</span><span class="money"><?php echo "$low"; ?></span></p>
                               </div>
                             </div>
                           </div>
@@ -522,7 +498,7 @@ function currencyconverter($symbol) {
                                 <h6 class="m-0 font-weight-bold text-primary">Price <?php echo "($mode)"; ?> </h6>
                               </div>
                               <div class="card-body">
-                                <p><?php echo "$$lastPrice"; ?> </p>
+                                <p><span class="symbol">$</span><span class="money"><?php echo "$lastPrice"; ?></span></p>
                               </div>
                             </div>
                           </div>
@@ -664,6 +640,8 @@ function currencyconverter($symbol) {
   <!-- Page level custom scripts -->
   <script src="js/demo/chart-area-demo.js"></script>
   <script src="js/demo/chart-pie-demo.js"></script>
+
+  <script src="currencyconverter.js"></script>
 
 </body>
 
