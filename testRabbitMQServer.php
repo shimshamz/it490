@@ -4,7 +4,7 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-function doLogin($username,$password)
+function doLogin($email, $password)
 {	
 $mydb = new mysqli('127.0.0.1','admin','password','stocks');
 
@@ -15,7 +15,7 @@ if ($mydb->errno != 0)
 }
 
 echo "successfully connected to database".PHP_EOL;
-	$query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$username' AND password = '$password' ");
+	$query = mysqli_query($mydb, "SELECT * FROM user WHERE email = '$email' AND password = '$password'");
 	$count = mysqli_num_rows($query);
 	//Check if credentials match the database
 	if ($count == 1){
@@ -38,7 +38,7 @@ if ($mydb->errno != 0)
 }
 
 
-function doregister($fname,$lname,$username,$password,$balance)
+function doregister($fname, $lname, $email, $password)
 {
 $mydb = new mysqli('127.0.0.1','admin','password','stocks');
 
@@ -50,21 +50,23 @@ if ($mydb->errno != 0)
 
 echo "successfully connected to database".PHP_EOL;
 
-	$query = mysqli_query($mydb,"SELECT * FROM users WHERE email = '$username' AND password = '$password'");
-	$count = mysqli_num_rows($query);
+$query = mysqli_query($mydb,"SELECT * FROM users WHERE email = '$email' AND password = '$password'");
+$count = mysqli_num_rows($query);
 
-        //Check if credentials match the database
-        if ($count == 1){
-                        //Match
-                        echo "<br><br>Please register with differernt email";
-                        return true;
-                }else{
-                        //No Match
-			$query = mysqli_query($mydb,"INSERT INTO users (fname, lname, email, password,balance) VALUES ('$fname','$lname','$username','$password','$balance')");
+//Check if credentials match the database
+if ($count == 1){
+  //Match
+  echo "<br><br>Please register with differernt email";
+  return true;
+}else{
+  //No Match
+  $query = mysqli_query($mydb, "INSERT INTO user (fname, lname, email, password) VALUES ('$fname','$lname','$email','$password')");
+  $user = mysqli_query($mydb, "SELECT id FROM user WHERE email = '$email'");
+  $query = mysqli_query($mydb, "INSERT INTO dashboard (userid) VALUES ('$user['id']')");
 
-			echo "<br><br>Register Successful!!!!";
-                        return false;
-                }
+  echo "<br><br>Register Successful!!!!";
+  return false;
+}
 
 if ($mydb->errno != 0)
 {
@@ -89,9 +91,9 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "login":
-	    return doLogin($request['username'],$request['password']);
+	    return doLogin($request['email'], $request['password']);
     case "register":
-	  return doregister($request ['fname'],$request['lname'],$request['username'],$request['password'],$request['balance']);
+	  return doregister($request ['fname'], $request['lname'], $request['email'], $request['password']);
 
 
     case "validate_session":
