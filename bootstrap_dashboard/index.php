@@ -2,17 +2,17 @@
 session_start();
 $userid = $_SESSION['userid'];
 
-$mydb = new mysqli('127.0.0.1','admin','password','stocks');
-if ($mydb->errno != 0)
-{
-        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-        exit(0);
-}
-echo "successfully connected to database".PHP_EOL;
+// $mydb = new mysqli('127.0.0.1','admin','password','stocks');
+// if ($mydb->errno != 0)
+// {
+//         echo "failed to connect to database: ". $mydb->error . PHP_EOL;
+//         exit(0);
+// }
+// echo "successfully connected to database".PHP_EOL;
 
-$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
+// $dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
 
-$currBal = $dash_info['balance'];
+// $currBal = $dash_info['balance'];
 ?>
 
 <!DOCTYPE html>
@@ -181,7 +181,7 @@ $currBal = $dash_info['balance'];
           </button>
 
           <!-- Topbar Search -->
-          <form method="post" action="searchresults.php" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form method="get" action="searchresults.php" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
               <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search symbol..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
@@ -367,9 +367,9 @@ $currBal = $dash_info['balance'];
                 Currency: USD ($)
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">USD ($)</a>
                 <a class="dropdown-item" href="#">GBP (&pound;)</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">EUR (&euro;)</a>
               </div>
             </div>
             

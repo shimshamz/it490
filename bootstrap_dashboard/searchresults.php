@@ -1,26 +1,54 @@
 <?php
 session_start();
 $username = $_SESSION['username'];
-//ERROR LOGGING
-
-$search_input = $_POST['search'];
-
-if (isset($_POST['search']) && !empty($_POST['search'])) {
-  $searchname = preg_replace('/\s+/', '+', $search_input);
-  //search
-  $json_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=".$search_input."");
-}
-
-$jsonarray = json_decode($json_string, true); //convert json into multidimensional associative array
 
 date_default_timezone_set('America/New_York');
-
 $sevenDaysAgo = date('Ymd', strtotime('-7 days'));
 $yesterday = date('Ymd', strtotime('yesterday'));
 
-$history_string = file_get_contents("https://marketdata.websol.barchart.com/getHistory.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbol=".$search_input."&type=daily&startDate=".$sevenDaysAgo."&endDate=".$yesterday."&order=desc");
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+  $search_input = $_GET['search'];
+  $searchname = preg_replace('/\s+/', '+', $search_input);
+  //search
+  $json_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=".$search_input."");
+  $history_string = file_get_contents("https://marketdata.websol.barchart.com/getHistory.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbol=".$search_input."&type=daily&startDate=".$sevenDaysAgo."&endDate=".$yesterday."&order=desc");
+}
 
+$jsonarray = json_decode($json_string, true); //convert json into multidimensional associative array
 $historyarray = json_decode($history_string, true);
+
+if (isset($_GET['currency']) && !empty($_GET['currency'])) {
+  currencyconverter($_GET['currency']);
+}
+else {
+  $exchangeRate = 1;
+  $symbol = 'USD ($)';
+  $currency = 'usd';
+}
+
+function currencyconverter($symbol) {
+  if ($symbol == 'usd') {
+    $exchangeRate = 1;
+    $symbol = 'USD ($)';
+    $currency = 'usd';
+  }
+  else if ($symbol == 'gbp') {
+    $forex_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=^GBPUSD");
+    $forexarray = json_decode($forex_string, true);
+    $value = $forexarray['results'][0]['lastPrice'];
+    $exchangeRate = $value;
+    $symbol = 'GBP (&pound;)';
+    $currency = 'gbp';
+  }
+  else if ($symbol == 'eur') {
+    $forex_string = file_get_contents("https://marketdata.websol.barchart.com/getQuote.json?apikey=aedef88fae1654cbca88ef03ee28b57e&symbols=^EURUSD");
+    $forexarray = json_decode($forex_string, true);
+    $value = round($forexarray['results']['lastPrice'], 2);
+    $exchangeRate = $value;
+    $symbol = 'EUR (&euro;)';
+    $currency = 'eur';
+  }
+}
 
 ?>
 
@@ -369,7 +397,19 @@ $historyarray = json_decode($history_string, true);
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Search Results</h1>
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Search Results</h1>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Currency: <?php echo $symbol; ?>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="searchresults.php?currency=usd">USD ($)</a>
+                <?php echo '<a class="dropdown-item" href="searchresults.php?search='.$search_input.'&currency=gbp">GBP (&pound;)</a>'; ?>
+                <a class="dropdown-item" href="searchresults.php?currency=eur">EUR (&euro;)</a>
+              </div>
+            </div>
+          </div>
 
           
               <?php
@@ -387,12 +427,12 @@ $historyarray = json_decode($history_string, true);
                   $mode = 'Real-time';
                 }
 
-                $lastPrice = $test["lastPrice"];
+                $lastPrice = $test["lastPrice"] * $exchangeRate;
                 $percentChange = $test["percentChange"];
-                $open = $test["open"];
-                $high = $test["high"];
-                $low = $test["low"];
-                $close = $test["close"];
+                $open = $test["open"] * $exchangeRate;
+                $high = $test["high"] * $exchangeRate;
+                $low = $test["low"] * $exchangeRate;
+                $close = $test["close"] * $exchangeRate;
                 $volume = $test["volume"];
               ?>
               <div class="card shadow mb-4">
