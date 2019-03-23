@@ -33,7 +33,7 @@ $totalAmount = $quantity * $price;
 #$request['currBal'] = $_SESSION['currBal'];
 #$request['totalAmount'] = $request['quantity']* $request['price'];
 
-$portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid AND company_symbol = $symbol");
+$portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = '$userid' AND company_symbol = '$symbol'");
 
 if (mysqli_num_rows($portfolio_info) == 0) {
 	echo "Company does not exist in your portfolio";
