@@ -2,7 +2,7 @@
 session_start();
 $username = $_SESSION['username'];
 //ERROR LOGGING
-
+include("buy.php");
 $search_input = $_POST['search'];
 
 if (isset($_POST['search']) && !empty($_POST['search'])) {
@@ -472,7 +472,7 @@ $jsonarray = json_decode($json_string, true); //convert json into multidimension
                   <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary btn-lg col-3">
                     <span class="text">Buy</span>
                   </a>
-                  <button onclick="location.href='sell.php'" class="btn btn-danger btn-lg col-3">
+                  <button onclick="location.href='buy.php'" class="btn btn-danger btn-lg col-3">
                     <span class="text">Sell</span>
                   </button>
                 </div>

@@ -1,18 +1,29 @@
 <?php
 session_start();
-$userid = $_SESSION['userid'];
+$useremail = $_SESSION["email"];
 
 $mydb = new mysqli('127.0.0.1','admin','password','stocks');
 if ($mydb->errno != 0)
 {
         echo "failed to connect to database: ". $mydb->error . PHP_EOL;
         exit(0);
+
 }
+
+echo "Userid : $useremail"; 
 echo "successfully connected to database".PHP_EOL;
 
-$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
+#$dash_info = mysqli_query($mydb,"SELECT * FROM user WHERE email = pap@gmail.com");
+$query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$useremail' ");
 
-$currBal = $dash_info['balance'];
+
+$row = mysqli_fetch_array($query);
+
+$currBal = $row['balance'];
+echo "balanc = $$currBal";
+
+$_SESSION['currBal'] = $currBal;
+
 ?>
 
 <!DOCTYPE html>
@@ -324,7 +335,7 @@ $currBal = $dash_info['balance'];
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" data-toggle="modal" data-target="#logoutModal">
+              <a class="nav-link dropdown-toggle" href="logout.php" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
               </a>
@@ -402,7 +413,7 @@ $currBal = $dash_info['balance'];
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Balance</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$5,000</div>
+		      <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "$$currBal"; ?> </div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>

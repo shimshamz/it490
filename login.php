@@ -1,9 +1,10 @@
 #!/usr/bin/php
 <?php
-require_once('/home/it490/rabbitmqphp_example/path.inc');
-require_once('/home/it490/rabbitmqphp_example/get_host_info.inc');
-require_once('/home/it490/rabbitmqphp_example/rabbitMQLib.inc');
-$client = new rabbitMQClient("/home/it490/rabbitmqphp_example/testRabbitMQ.ini","testServer");
+session_Start();
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');
+$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
 if (isset($argv[1]))
 {
@@ -17,7 +18,7 @@ $request = array();
 $request['type'] = "login";
 #$request['email'] = "user3@gmail.com";
 #$request['password'] = "1234";
-$request['username'] = $_POST['email'];
+$request['email'] = $_POST['email'];
 $request['password'] = $_POST['pass'];
 $request['message'] = $msg;
 $response = $client->send_request($request);
@@ -25,20 +26,16 @@ $response = $client->send_request($request);
 echo "client received response: ".PHP_EOL;
 print_r($response);
 echo "\n\n";
-if ($response == 0 ) {
-header("location:loginerror.html");
-}
-else {
-	$mydb = new mysqli('127.0.0.1','admin','password','stocks');
-	if ($mydb->errno != 0)
-	{
-	        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-	        exit(0);
-	}
-	echo "successfully connected to database".PHP_EOL;
-	$email = $_POST['email'];
-	$query = mysqli_query($mydb,"SELECT id FROM user WHERE email=$email");
-	$_SESSION['userid'] = $query['id'];
-	header("Location: index.php");
+if ($response == 1 ) {
+	$_SESSION["email"] = $_POST["email"];
+#	header("Location: php1.php");
+        header("Location:bootstrap_dashboard/index.php");
+#	header("location:loginerror.html");
+}else {
+#	$_SESSION["email"] = $_POST["email"];
+	#	header("Location: bootstrap_dashboard/index.php");
+
+	   header("location:loginerror.html");
+
 }
 ?>
