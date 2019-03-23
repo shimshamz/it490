@@ -3,21 +3,13 @@ create database stocks;
 	use stocks;
 	CREATE TABLE user 
 		(
-			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, fname varchar(100), lname varchar(60), email varchar(60), password varchar(255), ac_created TimeStamp DEFAULT current_timestamp
+			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, fname varchar(100), lname varchar(60), email varchar(60), password varchar(255), balance decimal(10,2) DEFAULT '5000', ac_created TimeStamp DEFAULT current_timestamp
 		);
-
-
-	use stocks;
-	create TABLE dashboard
-		(
-			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, userid int References user(id), balance decimal(10,2) DEFAULT '5000', last_login TimeStamp DEFAULT current_timestamp ON UPDATE current_timestamp  
-		); 
-
 
 	use stocks;
 	create TABLE portfolio
 		(
-			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, dashboard_id int References dashboard(id), comany_symbol char(25), company_name varchar(255), volume int, buy_date date, buy_amnt decimal(10,2), current_amnt decimal(10,2), sell_date date, sell_amnt decimal(10,2)
+			id int NOT NULL AUTO_INCREMENT PRIMARY KEY, user_id int References user(id), company_symbol char(25), company_name varchar(255), volume int, buy_date date, buy_amnt decimal(10,2), sell_date date, sell_amnt decimal(10,2)
 		);
 
 /* changed table names portfolio->dashboard and company->portfolio as it was getting a bit confusing
