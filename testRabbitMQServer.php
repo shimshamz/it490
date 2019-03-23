@@ -61,8 +61,10 @@ if ($count == 1){
 }else{
   //No Match
   $query = mysqli_query($mydb, "INSERT INTO user (fname, lname, email, password) VALUES ('$fname','$lname','$email','$password')");
-  $user = mysqli_query($mydb, "SELECT id FROM user WHERE email = '$email'");
-  $query = mysqli_query($mydb, "INSERT INTO dashboard (userid) VALUES ('$user['id']')");
+  $userQuery = mysqli_query($mydb, "SELECT id FROM user WHERE email = '$email'");
+  $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
+  $userid = $user['id'];
+  $query = mysqli_query($mydb, "INSERT INTO dashboard (userid) VALUES ('$userid')");
 
   echo "<br><br>Register Successful!!!!";
   return false;
