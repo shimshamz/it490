@@ -10,7 +10,7 @@ if ($mydb->errno != 0)
 }
 echo "successfully connected to database".PHP_EOL;
 # $query = mysqli_query($mydb,"INSERT INTO portfolio (dashboard_id, comany_symbol, company_name, volume, buy_date, buy_amnt, current_amnt, sell_date, sell_amnt) VALUES ('111', 'test0', 'test', '3', NOW(), '32', '32', NOW(), '32')");
-$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
+$userinfo = mysqli_query($mydb,"SELECT * FROM user WHERE userid = $userid");
 #$quantity = '3';
 #$symbol = '3';
 #$company_name = 'test';
@@ -42,9 +42,8 @@ if ($totalAmount  > $currBal ) {
 }
 else {
   $newBal = $currBal - $totalAmount;
-  $dash_info = mysqli_query($mydb,"UPDATE dashboard SET balance = $newBal WHERE userid = 8");
-  
- # $query = mysqli_query($mydb,"INSERT INTO portfolio (dashboard_id, comany_symbol, company_name, volume, buy_date, buy_amnt, current_amnt, sell_date, sell_amnt) VALUES ('56', '$symbol', '$company_name', '$quantity', CURDATE(), '$price', '$newBal', NOW(), NULL)");
+  $query = mysqli_query($mydb,"INSERT INTO portfolio (user_id, company_symbol, company_name, volume, buy_date, buy_amnt, sell_date, sell_amnt) VALUES ('$userid', '$symbol', '$company_name', '$quantity', CURDATE(), '$totalAmount', NULL, NULL)");
+  $user_info = mysqli_query($mydb,"UPDATE user SET balance = $newBal WHERE id='$userid'");
   
   echo "New Balance = $newBal";  
 #  header('Location: index.php');
