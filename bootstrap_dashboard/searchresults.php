@@ -548,9 +548,9 @@ $historyarray = json_decode($history_string, true);
                   <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary btn-lg col-3">
                     <span class="text">Buy</span>
                   </a>
-                  <button onclick="location.href='sell.php'" class="btn btn-danger btn-lg col-3">
+                  <a href="#" data-toggle="modal" data-target="#sellModal" class="btn btn-danger btn-lg col-3">
                     <span class="text">Sell</span>
-                  </button>
+                  </a>
                 </div>
 
                   </div>
@@ -621,6 +621,31 @@ $historyarray = json_decode($history_string, true);
           <form method="POST" action="buy.php">
             <input type="number" name="buy">
             <input type="submit" class="btn btn-primary" value="Buy">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sell Modal-->
+  <div class="modal fade" id="sellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sell</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>How many shares would like to sell?</p>
+          <div class="my-2"></div>
+          <form method="POST" action="sell.php">
+            <input type="number" name="sell">
+            <input type="submit" class="btn btn-primary" value="Sell">
           </form>
         </div>
         <div class="modal-footer">
