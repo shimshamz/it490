@@ -15,6 +15,7 @@ if ($mydb->errno != 0)
 $userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = $userid");
 $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
 $currBal = $user['balance'];
+$_SESSION['currBal'] = $currBal;
 ?>
 
 <!DOCTYPE html>
