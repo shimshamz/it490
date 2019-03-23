@@ -50,7 +50,7 @@ if ($mydb->errno != 0)
 
 echo "successfully connected to database".PHP_EOL;
 
-$query = mysqli_query($mydb,"SELECT * FROM users WHERE email = '$email' AND password = '$password'");
+$query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$email' AND password = '$password'");
 $count = mysqli_num_rows($query);
 
 //Check if credentials match the database
@@ -64,7 +64,6 @@ if ($count == 1){
   $userQuery = mysqli_query($mydb, "SELECT id FROM user WHERE email = '$email'");
   $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
   $userid = $user['id'];
-  $query = mysqli_query($mydb, "INSERT INTO dashboard (userid) VALUES ('$userid')");
 
   echo "<br><br>Register Successful!!!!";
   return false;
