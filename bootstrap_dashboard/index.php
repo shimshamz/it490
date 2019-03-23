@@ -2,6 +2,8 @@
 session_start();
 $userid = $_SESSION['userid'];
 
+$symbol = 'USD ($)';
+
 $mydb = new mysqli('127.0.0.1','admin','password','stocks');
 if ($mydb->errno != 0)
 {
@@ -364,15 +366,14 @@ $currBal = $user['balance'];
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Currency: USD ($)
+                Currency: <span class="currCurrency"><?php echo $symbol; ?></span>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">USD ($)</a>
-                <a class="dropdown-item" href="#">GBP (&pound;)</a>
-                <a class="dropdown-item" href="#">EUR (&euro;)</a>
+                <button class="dropdown-item" onclick="currConverter('usd')">USD ($)</button>
+                <button class="dropdown-item" onclick="currConverter('gbp')">GBP (&pound;)</button>
+                <button class="dropdown-item" onclick="currConverter('eur')">EUR (&euro;)</button>
               </div>
             </div>
-            
           </div>
 
           <!-- Content Row -->
@@ -385,7 +386,7 @@ $currBal = $user['balance'];
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Balance</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><span class="symbol">$</span><span class="money"><?php echo "$currBal"; ?></span></div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><span class="symbol">$</span><span class="money"><?php echo "5000"; ?></span></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -505,6 +506,8 @@ $currBal = $user['balance'];
   <!-- Page level custom scripts -->
   <script src="js/demo/chart-area-demo.js"></script>
   <script src="js/demo/chart-pie-demo.js"></script>
+
+  <script src="currencyconverter.js"></script>
 
 </body>
 
