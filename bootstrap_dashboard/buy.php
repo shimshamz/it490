@@ -10,26 +10,25 @@ if ($mydb->errno != 0)
 }
 echo "successfully connected to database".PHP_EOL;
 
-$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
+$userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = '$userid'");
+$user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
+$userid = $user['id'];
 
 $quantity = $_POST['buy'];
 $symbol = $_SESSION['symbol'];
 $company_name = $_SESSION['name'];
 $price = $_SESSION['currPrice'];
-$dashboard_id = $dash_info['balance'];
-$currBal = $dash_info['balance'];
+$currBal = $user['balance'];
 
 $totalAmount = $quantity * $price;
-
-
-$query = mysqli_query($mydb,"INSERT INTO portfolio (dashboard_id, company_symbol, company_name, volume, buy_date, buy_amount) VALUES ($dashboard_id, $symbol, $company_name, $quantity, CURDATE(), $price)");
 
 if ($totalAmount > $currBal) {
   echo "Total buy amount exceeds balance available."
 }
 else {
+  $query = mysqli_query($mydb, "INSERT INTO portfolio (user_id, company_symbol, company_name, volume, buy_date, buy_amnt) VALUES ('$userid', '$symbol', '$company_name', '$quantity', CURDATE(), '$price')");
   $newBal = $currBal - $totalAmount;
-  $dash_info = mysqli_query($mydb,"UPDATE dashboard SET balance = $newBal WHERE id = $dashboard_id");
+  $balanceUpdate = mysqli_query($mydb, "UPDATE user SET balance = $newBal WHERE id = $id");
   
   header('Location: index.php');
 }
