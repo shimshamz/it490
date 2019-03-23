@@ -386,7 +386,7 @@ $currBal = $user['balance'];
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Balance</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><span class="symbol">$</span><span class="money"><?php echo "5000"; ?></span></div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><span class="symbol">$</span><span class="money"><?php echo "$currBal"; ?></span></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>
