@@ -16,7 +16,7 @@ $userinfo = mysqli_query($mydb,"SELECT * FROM user WHERE userid = $userid");
 #$company_name = 'test';
 #$price = '3';
 #$dashboard_id = 'test';
-$currBal = '3';
+#$currBal = '3';
 #$totalAmount = '3';
 $quantity = $_POST['buy'];
 $symbol = $_SESSION['symbol'];
