@@ -8,11 +8,11 @@ if ($mydb->errno != 0)
         echo "failed to connect to database: ". $mydb->error . PHP_EOL;
         exit(0);
 }
-echo "successfully connected to database".PHP_EOL;
+//echo "successfully connected to database".PHP_EOL;
 
-$dash_info = mysqli_query($mydb,"SELECT * FROM dashboard WHERE userid = $userid");
-
-$currBal = $dash_info['balance'];
+$userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = $userid");
+$user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
+$currBal = $user['balance'];
 ?>
 
 <!DOCTYPE html>

@@ -40,8 +40,8 @@ else {
 	}
 	echo "successfully connected to database".PHP_EOL;
 	$email = $_POST['email'];
-	$query = mysqli_query($mydb,"SELECT id FROM user WHERE email=$email");
-	$user = mysqli_fetch_array($query, MYSQLI_ASSOC);
+	$query = mysqli_query($mydb,"SELECT id FROM user WHERE email='$email'");
+	$user = mysqli_fetch_array($query,MYSQLI_ASSOC);
 	$_SESSION['userid'] = $user['id'];
 	header("Location: bootstrap_dashboard/index.php");
 }
