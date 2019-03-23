@@ -2,9 +2,13 @@
 <?php
 session_start();
 $userid = $_SESSION['userid'];
-
-require('../database/php');
-
+$mydb = new mysqli('127.0.0.1','admin','password','stocks');
+if ($mydb->errno != 0)
+{
+        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
+        exit(0);
+}
+echo "successfully connected to database".PHP_EOL;
 # $query = mysqli_query($mydb,"INSERT INTO portfolio (dashboard_id, comany_symbol, company_name, volume, buy_date, buy_amnt, current_amnt, sell_date, sell_amnt) VALUES ('111', 'test0', 'test', '3', NOW(), '32', '32', NOW(), '32')");
 $userinfo = mysqli_query($mydb,"SELECT * FROM user WHERE userid = $userid");
 #$quantity = '3';
