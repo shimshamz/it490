@@ -404,6 +404,7 @@ $historyarray = json_decode($history_string, true);
                 $low = $test["low"];
                 $close = $test["close"];
                 $volume = $test["volume"];
+                $exchange = $test["exchange"];
               ?>
               <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex align-items-center justify-content-between">
@@ -549,6 +550,7 @@ $historyarray = json_decode($history_string, true);
                 $_SESSION['symbol'] = $symbol;
                 $_SESSION['name'] = $name;
                 $_SESSION['currPrice'] = $lastPrice;
+                $_SESSION['exchange'] = $exchange;
 
                 ?>
 
