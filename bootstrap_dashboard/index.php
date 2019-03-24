@@ -74,7 +74,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
           <i class="fas fa-fw fa-graduation-cap"></i>
           <span>Stocks 101</span>
         </a>
-        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Learn More</h6>
             <a class="collapse-item" href="gettingstarted.php">Getting Started</a>
