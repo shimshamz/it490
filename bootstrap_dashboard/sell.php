@@ -36,9 +36,9 @@ else {
 	$portfolioId = $info['id'];
 	$currTotalVal = $info['total_value'];
     $currVolume = $info['total_volume'];
-    
+
 	if ($quantity > $currVolume) {
-		echo "The quantity requested to sell exceeds the available volume of shares."
+		echo "The quantity requested to sell exceeds the available volume of shares.";
 	}
 	else {
 		$newBal = $currBal + $totalSellVal;
