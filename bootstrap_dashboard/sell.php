@@ -29,7 +29,7 @@ $totalSellVal = $quantity * $currPrice;
 $portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = '$userid' AND company_symbol = '$symbol'");
 
 if (mysqli_num_rows($portfolio_info) == 0) {
-	echo "Company does not exist in your portfolio";
+	echo "Company does not exist in your portfolio.";
 }
 else {
 	$info = mysqli_fetch_array($portfolio_info, MYSQLI_ASSOC);
@@ -38,7 +38,7 @@ else {
     $currVolume = $info['total_volume'];
 
 	if ($quantity > $currVolume) {
-		echo "The quantity requested to sell exceeds the available volume of shares.";
+		echo "The quantity requested to sell exceeds the volume of shares available.";
 	}
 	else {
 		$newBal = $currBal + $totalSellVal;
