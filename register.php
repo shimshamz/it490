@@ -36,22 +36,12 @@ print_r($response);
 echo "\n\n";
 
 
-
-#$request = array();
-#$request['type'] = "register";
-#$request['fname'] = 'lol';
-#$request['lname'] = 'lol';
-#$request['email'] = '12@gmail.com';
-#$request['password'] = 'lol';
-#$request['message'] = $msg;
-#$response = $client->send_request($request);
-//$response = $client->publish($request);
-
-#echo "Client received respone  ".PHP_EOL;
-#print_r($response);
-#echo "\n\n";
-
-#echo $argv[0]." END".PHP_EOL;
+if ($response == 0 ) {
+	header("location: registererror.html");
+}
+else {
+	header("location: registersuccess.html");
+}
 
 
 ?>
