@@ -18,7 +18,7 @@ $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
 
 $portfolioQuery = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid ORDER BY company_name ASC");
-$portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
+$rowCount = mysqli_num_rows($portfolioQuery);
 ?>
 
 <!DOCTYPE html>
@@ -413,41 +413,50 @@ $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
                   <h6 class="m-0 font-weight-bold text-primary">My Portfolio</h6>
                 </div>
                 <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <thead>
-                        <tr>
-                          <th>Symbol</th>
-                          <th>Company Name</th>
-                          <th>Total Value</th>
-                          <th>Total Volume</th>
-                          <th>Buy Price</th>
-                          <th>Buy Volume</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      <!-- The BELOW can be removed once connected to backend (it's just some fake data) -->
-                        <?php
+                  <?php 
 
-                        foreach ($portfolioItems as $item) { 
-                          ?>
+                  if ($rowCount == 0) {
+                    echo "<p>Your portfolio is currently empty.</p>"
+                  } 
+                  else {
+                    $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
+                  ?>
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
                           <tr>
-                            <td><?php echo $item['company_symbol']; ?></td>
-                            <td><?php echo $item['company_name']; ?></td>
-                            <td><?php echo $item['total_value']; ?></td>
-                            <td><?php echo $item['total_volume']; ?></td>
-                            <td><?php echo $item['last_buy_price']; ?></td>
-                            <td><?php echo $item['last_buy_volume']; ?></td>
+                            <th>Symbol</th>
+                            <th>Company Name</th>
+                            <th>Total Value</th>
+                            <th>Total Volume</th>
+                            <th>Buy Price</th>
+                            <th>Buy Volume</th>
                           </tr>
-                        <?php
+                        </thead>
+                        <tbody>
+                        <!-- The BELOW can be removed once connected to backend (it's just some fake data) -->
+                          <?php
 
-                        }
+                          foreach ($portfolioItems as $item) { 
+                            ?>
+                            <tr>
+                              <td><?php echo $item['company_symbol']; ?></td>
+                              <td><?php echo $item['company_name']; ?></td>
+                              <td><?php echo $item['total_value']; ?></td>
+                              <td><?php echo $item['total_volume']; ?></td>
+                              <td><?php echo $item['last_buy_price']; ?></td>
+                              <td><?php echo $item['last_buy_volume']; ?></td>
+                            </tr>
+                          <?php
 
-                        ?>
-                      <!-- The ABOVE can be removed once connected to backend -->
-                      </tbody>
-                    </table>
-                  </div>
+                          }
+                  }
+
+                  ?>
+                        <!-- The ABOVE can be removed once connected to backend -->
+                        </tbody>
+                      </table>
+                    </div>
                 </div>
               </div>
             </div>
