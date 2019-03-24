@@ -18,7 +18,7 @@ $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
 
 $portfolioQuery = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid ORDER BY company_name ASC");
-$portfolioItems = mysqli_fetch_array($portfolioQuery, MYSQLI_ASSOC);
+$portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
