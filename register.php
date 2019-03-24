@@ -37,10 +37,10 @@ echo "\n\n";
 
 
 if ($response == 0 ) {
-	header("location: registersuccess.html");
+	header("location: registererror.html");
 }
 else {
-	header("location: registererror.html");
+	header("location: registersuccess.html");
 }
 
 
