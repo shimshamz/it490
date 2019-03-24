@@ -17,16 +17,16 @@ $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
 $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
 
-$nyseQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numNYSE FROM portfolio WHERE exchange='NYSE'");
+$nyseQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNYSE FROM portfolio WHERE exchange='NYSE'");
 $nyse = mysqli_fetch_array($nyseQuery, MYSQLI_ASSOC);
 
-$nasQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numNAS FROM portfolio WHERE exchange='NASDAQ'");
+$nasQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNAS FROM portfolio WHERE exchange='NASDAQ'");
 $nas = mysqli_fetch_array($nasQuery, MYSQLI_ASSOC);
 
-$forexQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numFOREX FROM portfolio WHERE exchange='FOREX'");
+$forexQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numFOREX FROM portfolio WHERE exchange='FOREX'");
 $forex = mysqli_fetch_array($forexQuery, MYSQLI_ASSOC);
 
-$exchangeCount = array($nyse['exchange'] => $nyse['numNYSE'], $nyse['exchange'] => $nyse['numNYSE'], $nyse['exchange'] => $nyse['numNYSE']);
+$exchangeCount = array('NYSE' => $nyse['numNYSE'], 'NASDAQ' => $nas['numNAS'], 'FOREX' => $forex['numFOREX']);
 
 $maxCount = 0;
 foreach ($exchangeCount as $key => $value) {
@@ -35,7 +35,7 @@ foreach ($exchangeCount as $key => $value) {
   }
 }
 
-if ($maxCount = 0) {
+if ($maxCount == 0) {
   $selectedExchange = 'All';
 }
 $json_string = file_get_contents("../videos.json");
@@ -322,7 +322,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'NYSE') { 
           ?>
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -346,7 +346,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'NASDAQ') { 
           ?>
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -370,7 +370,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'FOREX') { 
           ?>
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -393,7 +393,7 @@ $jsonarray = json_decode($json_string, true);
               foreach ($jsonarray['info'] as $item) {
           ?>
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -403,7 +403,7 @@ $jsonarray = json_decode($json_string, true);
                             <p><?php echo $para; ?></p>
                           <?php } ?>
                           <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen</iframe>
                           </div>
                         </div>
                       </div>
