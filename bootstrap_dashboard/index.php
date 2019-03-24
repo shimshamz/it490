@@ -16,6 +16,9 @@ $userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = $userid");
 $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
 $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
+
+$portfolioQuery = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid ORDER BY company_name ASC");
+$portfolioItems = mysqli_fetch_array($portfolioQuery, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -406,26 +409,44 @@ $_SESSION['currBal'] = $currBal;
             <!-- Area Chart -->
             <div class="col-xl-8 col-lg-7">
               <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">My Portfolio</h6>
                 </div>
-                <!-- Card Body -->
                 <div class="card-body">
-                  <div class="chart-area">
-                    <canvas id="myAreaChart"></canvas>
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Symbol</th>
+                          <th>Company Name</th>
+                          <th>Total Value</th>
+                          <th>Total Volume</th>
+                          <th>Buy Price</th>
+                          <th>Buy Volume</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <!-- The BELOW can be removed once connected to backend (it's just some fake data) -->
+                        <?php
+
+                        foreach ($portfolioItems as $item) { 
+                          ?>
+                          <tr>
+                            <td><?php echo $item['company_symbol']; ?></td>
+                            <td><?php echo $item['company_name']; ?></td>
+                            <td><?php echo $item['total_value']; ?></td>
+                            <td><?php echo $item['total_volume']; ?></td>
+                            <td><?php echo $item['last_buy_price']; ?></td>
+                            <td><?php echo $item['last_buy_volume']; ?></td>
+                          </tr>
+                        <?php
+
+                        }
+
+                        ?>
+                      <!-- The ABOVE can be removed once connected to backend -->
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
