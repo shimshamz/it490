@@ -34,7 +34,7 @@ function doLogin($email, $password)
 function doregister($fname, $lname, $email, $password)
 {
   global $mydb;
-  $query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$email' AND password = '$password'");
+  $query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$email'");
   $count = mysqli_num_rows($query);
 
   //Check if credentials match the database
