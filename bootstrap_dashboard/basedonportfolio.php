@@ -32,6 +32,7 @@ $maxCount = 0;
 foreach ($exchangeCount as $key => $value) {
   if ($value > $maxCount) {
     $selectedExchange = $key;
+    $maxCount = $value;
   }
 }
 
