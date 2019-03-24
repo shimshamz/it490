@@ -17,13 +17,13 @@ $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
 $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
 
-$nyseQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNYSE FROM portfolio WHERE exchange='NYSE'");
+$nyseQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNYSE FROM portfolio WHERE user_id='$userid' AND exchange='NYSE'");
 $nyse = mysqli_fetch_array($nyseQuery, MYSQLI_ASSOC);
 
-$nasQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNAS FROM portfolio WHERE exchange='NASDAQ'");
+$nasQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numNAS FROM portfolio WHERE user_id='$userid' AND  exchange='NASDAQ'");
 $nas = mysqli_fetch_array($nasQuery, MYSQLI_ASSOC);
 
-$forexQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numFOREX FROM portfolio WHERE exchange='FOREX'");
+$forexQuery = mysqli_query($mydb,"SELECT COUNT(exchange) AS numFOREX FROM portfolio WHERE user_id='$userid' AND exchange='FOREX'");
 $forex = mysqli_fetch_array($forexQuery, MYSQLI_ASSOC);
 
 $exchangeCount = array('NYSE' => $nyse['numNYSE'], 'NASDAQ' => $nas['numNAS'], 'FOREX' => $forex['numFOREX']);
