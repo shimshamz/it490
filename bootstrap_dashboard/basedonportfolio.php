@@ -17,8 +17,30 @@ $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
 $currBal = $user['balance'];
 $_SESSION['currBal'] = $currBal;
 
-$portfolioQuery = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid ORDER BY company_name ASC");
-$portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
+$nyseQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numNYSE FROM portfolio WHERE exchange='NYSE'");
+$nyse = mysqli_fetch_array($nyseQuery, MYSQLI_ASSOC);
+
+$nasQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numNAS FROM portfolio WHERE exchange='NASDAQ'");
+$nas = mysqli_fetch_array($nasQuery, MYSQLI_ASSOC);
+
+$forexQuery = mysqli_query($mydb,"SELECT exchange, COUNT(exchange) AS numFOREX FROM portfolio WHERE exchange='FOREX'");
+$forex = mysqli_fetch_array($forexQuery, MYSQLI_ASSOC);
+
+$exchangeCount = array($nyse['exchange'] => $nyse['numNYSE'], $nyse['exchange'] => $nyse['numNYSE'], $nyse['exchange'] => $nyse['numNYSE']);
+
+$maxCount = 0;
+foreach ($exchangeCount as $key => $value) {
+  if ($value > $maxCount) {
+    $selectedExchange = $key;
+  }
+}
+
+if ($maxCount = 0) {
+  $selectedExchange = 'All';
+}
+$json_string = file_get_contents("../videos.json");
+$jsonarray = json_decode($json_string, true);
+
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +54,7 @@ $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Getting Started</title>
+  <title>Based on Portfolio</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -52,117 +74,38 @@ $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <div class="sidebar-brand d-flex align-items-center justify-content-center">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Educational Tool</div>
-      </a>
+      </div>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
+      
+      <li class="nav-item active">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-graduation-cap"></i>
-          <span>Investments 101</span></a>
+          <span>Stocks 101</span>
+        </a>
+        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Learn More</h6>
+            <a class="collapse-item" href="gettingstarted.php">Getting Started</a>
+            <a class="collapse-item active" href="basedonportfolio.php">Based on your Portfolio</a>
+          </div>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="portfolio.php">
-          <i class="fas fa-fw fa-book-open"></i>
-          <span>My Portfolio</span></a>
-      </li>
-
       <!-- Divider -->
       <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Interface
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Components</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Components:</h6>
-            <a class="collapse-item" href="buttons.html">Buttons</a>
-            <a class="collapse-item" href="cards.html">Cards</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench"></i>
-          <span>Utilities</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Addons
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-          </div>
-        </div>
-      </li>
-
-      <!-- Nav Item - Charts -->
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-
-      <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
@@ -367,115 +310,111 @@ $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Getting Started</h1>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Currency: <span class="currCurrency"><?php echo $symbol; ?></span>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item" onclick="currConverter('usd')">USD ($)</button>
-                <button class="dropdown-item" onclick="currConverter('gbp')">GBP (&pound;)</button>
-                <button class="dropdown-item" onclick="currConverter('eur')">EUR (&euro;)</button>
-              </div>
-            </div>
+            <h1 class="h3 mb-0 text-gray-800">Based on your Portfolio</h1>
           </div>
 
           <!-- Content Row -->
 
-          <div class="row">
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">What is a stock?</h6>
-                </div>
-                <div class="card-body">
-                  <p>Before we get into the stock market, you have to first understand what you are buying. In this tutorial you will learn what a stock is and what it means to buy one.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/98qfFzqDKR8" allowfullscreen></iframe>
+          <?php 
+          switch ($selectedExchange) {
+            case 'NYSE':
+              foreach ($jsonarray['info'] as $item) {
+                if ($item['exchange'] == 'NYSE') { 
+          ?>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
+                        </div>
+                        <div class="card-body">
+                          <?php foreach ($item['text'] as $para) { ?>
+                            <p><?php echo $para; ?></p>
+                          <?php } ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Let's talk money</h6>
-                </div>
-                <div class="card-body">
-                  <p>Through this tutorial, you will learn the terms commonly used when talking about finance. This tutorial is also a stepping stone into getting involved in the Stock Market.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/fa-VZ-SDxgY" allowfullscreen></iframe>
+          <?php   }
+              }
+              break;
+            case 'NASDAQ':
+              foreach ($jsonarray['info'] as $item) {
+                if ($item['exchange'] == 'NASDAQ') { 
+          ?>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
+                        </div>
+                        <div class="card-body">
+                          <?php foreach ($item['text'] as $para) { ?>
+                            <p><?php echo $para; ?></p>
+                          <?php } ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="row">
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Buying stocks</h6>
-                </div>
-                <div class="card-body">
-                  <p>This video should help out all beginners in the stock market who want to know how to invest in the stock market in 2019. We will discuss how to buy stocks, where to buy stocks, how much money do you need to buy stocks, how to invest in the stock market, what is the best brokerage for buying stocks and so much more.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/3EqqfQQEbKQ" allowfullscreen></iframe>
+          <?php   }
+              }
+              break;
+            case 'FOREX':
+              foreach ($jsonarray['info'] as $item) {
+                if ($item['exchange'] == 'FOREX') { 
+          ?>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
+                        </div>
+                        <div class="card-body">
+                          <?php foreach ($item['text'] as $para) { ?>
+                            <p><?php echo $para; ?></p>
+                          <?php } ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Diversifying your portfolio</h6>
-                </div>
-                <div class="card-body">
-                  <p>Building a diverse portfolio is very important because you want to make sure that your money is safe. This is one of the precautions that you should take to ensure safety.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5FnOsX5xPjQ" allowfullscreen></iframe>
+          <?php   }
+              }
+              break;
+            default:
+              foreach ($jsonarray['info'] as $item) {
+          ?>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
+                        </div>
+                        <div class="card-body">
+                          <?php foreach ($item['text'] as $para) { ?>
+                            <p><?php echo $para; ?></p>
+                          <?php } ?>
+                          <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="row">
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Monitoring your stocks</h6>
-                </div>
-                <div class="card-body">
-                  <p>The first step in getting involved in the Stock Market is to purchase stocks. After putting money into the market, you purchase stocks and then monitor to see gain/loss.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/MXDtgPjJ2rA" allowfullscreen></iframe>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Selling your stocks</h6>
-                </div>
-                <div class="card-body">
-                  <p>When the time is right, selling your stocks can be of great intrest. It can be a way of making a profit or if you think the stock will continue to fall, a way to ensure that your loss does not get any worse. Today we talk about when to sell a stock.</p>
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tNN1vvFuxyg" allowfullscreen></iframe>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <?php
+              }
+              break;
+          }
+          ?>
+          
           </div>
 
         </div>
