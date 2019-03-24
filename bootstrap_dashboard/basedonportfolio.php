@@ -411,7 +411,6 @@ $jsonarray = json_decode($json_string, true);
                   </div>
           <?php
               }
-              break;
           }
           ?>
 
