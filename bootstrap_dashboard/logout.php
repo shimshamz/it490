@@ -6,4 +6,6 @@ session_destroy();
 
 echo "Logged out successfully";
 
+header("Location: ../index.html");
+
 ?>
