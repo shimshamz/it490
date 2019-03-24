@@ -416,7 +416,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                   <?php 
 
                   if ($rowCount == 0) {
-                    echo "<p>Your portfolio is currently empty.</p>"
+                    echo "<p>Your portfolio is currently empty.</p>";
                   } 
                   else {
                     $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
