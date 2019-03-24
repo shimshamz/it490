@@ -350,8 +350,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                           <th>Company Name</th>
                           <th>Total Value</th>
                           <th>Total Volume</th>
-                          <th>Buy Price</th>
-                          <th>Buy Volume</th>
+                          <th>Last Buy Price</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -362,10 +361,9 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                           <tr>
                             <td><?php echo $item['company_symbol']; ?></td>
                             <td><?php echo $item['company_name']; ?></td>
-                            <td><?php echo $item['total_value']; ?></td>
+                            <td><span class="symbol">$</span><span class="money"><?php echo $item['total_value']; ?></span></td>
                             <td><?php echo $item['total_volume']; ?></td>
-                            <td><?php echo $item['last_buy_price']; ?></td>
-                            <td><?php echo $item['last_buy_volume']; ?></td>
+                            <td><span class="symbol">$</span><span class="money"><?php echo $item['last_buy_price']; ?></span></td>
                           </tr>
                         <?php
                         }
