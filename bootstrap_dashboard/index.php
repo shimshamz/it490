@@ -406,57 +406,58 @@ $rowCount = mysqli_num_rows($portfolioQuery);
 
           <div class="row">
 
-            <!-- Area Chart -->
             <div class="col-xl-8 col-lg-7">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">My Portfolio</h6>
                 </div>
                 <div class="card-body">
-                  <?php 
 
-                  if ($rowCount == 0) {
-                    echo "<p>Your portfolio is currently empty.</p>";
-                  } 
-                  else {
+                <?php 
+                if ($rowCount == 0) {
+                  echo "<p>Your portfolio is currently empty.</p>"; 
+                }
+                else { 
                     $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
-                  ?>
-                    <div class="table-responsive">
-                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
+                ?>
+
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Symbol</th>
+                          <th>Company Name</th>
+                          <th>Total Value</th>
+                          <th>Total Volume</th>
+                          <th>Buy Price</th>
+                          <th>Buy Volume</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <?php
+                        foreach ($portfolioItems as $item) { 
+                          ?>
                           <tr>
-                            <th>Symbol</th>
-                            <th>Company Name</th>
-                            <th>Total Value</th>
-                            <th>Total Volume</th>
-                            <th>Buy Price</th>
-                            <th>Buy Volume</th>
+                            <td><?php echo $item['company_symbol']; ?></td>
+                            <td><?php echo $item['company_name']; ?></td>
+                            <td><?php echo $item['total_value']; ?></td>
+                            <td><?php echo $item['total_volume']; ?></td>
+                            <td><?php echo $item['last_buy_price']; ?></td>
+                            <td><?php echo $item['last_buy_volume']; ?></td>
                           </tr>
-                        </thead>
-                        <tbody>
-                        <!-- The BELOW can be removed once connected to backend (it's just some fake data) -->
-                          <?php
+                        <?php
+                        }
+                        ?>
 
-                          foreach ($portfolioItems as $item) { 
-                            ?>
-                            <tr>
-                              <td><?php echo $item['company_symbol']; ?></td>
-                              <td><?php echo $item['company_name']; ?></td>
-                              <td><?php echo $item['total_value']; ?></td>
-                              <td><?php echo $item['total_volume']; ?></td>
-                              <td><?php echo $item['last_buy_price']; ?></td>
-                              <td><?php echo $item['last_buy_volume']; ?></td>
-                            </tr>
-                          <?php
+                      </tbody>
+                    </table>
+                  </div>
 
-                          }
-                  }
+                <?php 
+                } 
+                ?>
 
-                  ?>
-                        <!-- The ABOVE can be removed once connected to backend -->
-                        </tbody>
-                      </table>
-                    </div>
                 </div>
               </div>
             </div>
@@ -473,6 +474,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 </div>
               </div>
             </div>
+
           </div>
 
         </div>
