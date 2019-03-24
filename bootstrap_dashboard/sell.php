@@ -46,9 +46,10 @@ else {
     	$newVolume = $currVolume - $quantity;
 		$query = mysqli_query($mydb,"UPDATE portfolio SET total_value='$newTotalVal', total_volume='$newVolume', last_sell_price='$currPrice', last_sell_volume='$quantity' WHERE id='$portfolioId'");
 		$user_info = mysqli_query($mydb,"UPDATE user SET balance = $newBal WHERE id='$userid'");
-	}
 
-	echo "New Balance = $newBal";  
+		echo "New Balance = $newBal"; 
+	}
+ 
 	#  header('Location: index.php');
 }
 
