@@ -414,8 +414,6 @@ $jsonarray = json_decode($json_string, true);
               break;
           }
           ?>
-          
-          </div>
 
         </div>
         <!-- /.container-fluid -->
