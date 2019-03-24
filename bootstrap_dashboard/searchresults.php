@@ -406,8 +406,16 @@ $historyarray = json_decode($history_string, true);
                 $volume = $test["volume"];
               ?>
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary"><?php echo "<strong>$name ($symbol)</strong> <br>"; ?></h6>
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                  <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>$name ($symbol)</strong>"; ?></span>
+                  <span>
+                    <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary btn-lg mx-1 px-4">
+                      <span class="text">Buy</span>
+                    </a>
+                    <a href="#" data-toggle="modal" data-target="#sellModal" class="btn btn-danger btn-lg mx-1 px-4">
+                      <span class="text">Sell</span>
+                    </a>
+                  </span>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -544,15 +552,6 @@ $historyarray = json_decode($history_string, true);
 
                 ?>
 
-                <div class="row justify-content-around">
-                  <a href="#" data-toggle="modal" data-target="#buyModal" class="btn btn-primary btn-lg col-3">
-                    <span class="text">Buy</span>
-                  </a>
-                  <a href="#" data-toggle="modal" data-target="#sellModal" class="btn btn-danger btn-lg col-3">
-                    <span class="text">Sell</span>
-                  </a>
-                </div>
-
                   </div>
                 </div>
               <?php
@@ -599,7 +598,7 @@ $historyarray = json_decode($history_string, true);
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.php">Logout</a>
+          <a class="btn btn-primary" href="logout.php">Logout</a>
         </div>
       </div>
     </div>
@@ -616,10 +615,10 @@ $historyarray = json_decode($history_string, true);
           </button>
         </div>
         <div class="modal-body">
-          <p>How many shares would like to buy?</p>
+          <p>How many shares would you like to buy?</p>
           <div class="my-2"></div>
           <form method="POST" action="buy.php">
-            <input type="number" name="buy">
+            <input type="number" name="buy" required>
             <input type="submit" class="btn btn-primary" value="Buy">
           </form>
         </div>
@@ -641,11 +640,11 @@ $historyarray = json_decode($history_string, true);
           </button>
         </div>
         <div class="modal-body">
-          <p>How many shares would like to sell?</p>
+          <p>How many shares would you like to sell?</p>
           <div class="my-2"></div>
           <form method="POST" action="sell.php">
-            <input type="number" name="sell">
-            <input type="submit" class="btn btn-primary" value="Sell">
+            <input type="number" name="sell" required>
+            <input type="submit" class="btn btn-danger" value="Sell">
           </form>
         </div>
         <div class="modal-footer">
