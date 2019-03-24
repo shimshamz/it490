@@ -43,7 +43,7 @@ else {
     $currBuyAmnt = $info['buy_amnt'];
     $newVolume = $currVolume + $quantity;
     $newBuyAmnt = $currBuyAmnt + $totalAmount;
-    $query = mysqli_query($mydb,"UPDATE portfolio SET volume='$newVolume', buy_amnt='$newBuyAmnt' WHERE id='$portfolioId')");
+    $query = mysqli_query($mydb,"UPDATE portfolio SET volume='$newVolume', buy_amnt='$newBuyAmnt' WHERE id='$portfolioId'");
     $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
   }
   
