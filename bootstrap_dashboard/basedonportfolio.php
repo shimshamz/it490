@@ -322,7 +322,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'NYSE') { 
           ?>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -346,7 +346,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'NASDAQ') { 
           ?>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -370,7 +370,7 @@ $jsonarray = json_decode($json_string, true);
                 if ($item['exchange'] == 'FOREX') { 
           ?>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -393,7 +393,7 @@ $jsonarray = json_decode($json_string, true);
               foreach ($jsonarray['info'] as $item) {
           ?>
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12">
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
                           <h6 class="m-0 font-weight-bold text-primary"><?php echo $item['title']; ?></h6>
@@ -403,7 +403,7 @@ $jsonarray = json_decode($json_string, true);
                             <p><?php echo $para; ?></p>
                           <?php } ?>
                           <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen</iframe>
+                            <iframe class="embed-responsive-item" src="<?php echo $item['url']; ?>" allowfullscreen></iframe>
                           </div>
                         </div>
                       </div>
