@@ -62,6 +62,39 @@ function doregister($fname, $lname, $email, $password)
 
 }
 
+function buy($userid, $quantity, $symbol, $name, $currPrice, $exchange, $currBal) {
+  $totalBuyVal = $quantity * $currPrice;
+
+  if ($totalBuyVal  > $currBal ) {
+    echo "Total buy amount exceeds balance available.";
+    return false;
+  }
+  else {
+    $newBal = $currBal - $totalBuyVal;
+    $portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = '$userid' AND company_symbol = '$symbol'");
+
+    if (mysqli_num_rows($portfolio_info) == 0) {
+      $query = mysqli_query($mydb,"INSERT INTO portfolio (user_id, company_symbol, company_name, total_value, total_volume, last_buy_price, last_buy_volume, last_sell_price, last_sell_volume, exchange) VALUES ('$userid', '$symbol', '$company_name', '$totalBuyVal', '$quantity', '$currPrice', '$quantity', NULL, NULL, '$exchange')");
+      $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
+    }
+    else {
+      $info = mysqli_fetch_array($portfolio_info, MYSQLI_ASSOC);
+      $portfolioId = $info['id'];
+      $currTotalVal = $info['total_value'];
+      $currVolume = $info['total_volume'];
+      $newTotalVal = $currTotalVal + $totalBuyVal;
+      $newVolume = $currVolume + $quantity;
+      $query = mysqli_query($mydb,"UPDATE portfolio SET total_value='$newTotalVal', total_volume='$newVolume', last_buy_price='$currPrice', last_buy_volume='$quantity' WHERE id='$portfolioId'");
+      $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
+    }
+    
+    echo "Transaction successful!<br><br>";
+    echo "New Balance = $newBal";  
+
+    return true;
+  }
+}
+
 
 function requestProcessor($request)
 {
@@ -77,7 +110,8 @@ function requestProcessor($request)
 	    return doLogin($request['email'], $request['password']);
     case "register":
 	  return doregister($request ['fname'], $request['lname'], $request['email'], $request['password']);
-
+    case "buy":
+      return buy($request['userid'], $request['quantity'], $request['symbol'], $request['name'], $request['currPrice'], $request['exchange'], $_SESSION['currBal']);
 
     case "validate_session":
       return doValidate($request['sessionId']);
