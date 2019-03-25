@@ -63,6 +63,8 @@ function doregister($fname, $lname, $email, $password)
 }
 
 function buy($userid, $quantity, $symbol, $name, $currPrice, $exchange, $currBal) {
+  global $mydb;
+  
   $totalBuyVal = $quantity * $currPrice;
 
   if ($totalBuyVal  > $currBal ) {
