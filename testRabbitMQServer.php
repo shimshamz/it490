@@ -64,7 +64,7 @@ function doregister($fname, $lname, $email, $password)
 
 function buy($userid, $quantity, $symbol, $name, $currPrice, $exchange, $currBal) {
   global $mydb;
-  
+
   $totalBuyVal = $quantity * $currPrice;
 
   if ($totalBuyVal  > $currBal ) {
@@ -113,7 +113,7 @@ function requestProcessor($request)
     case "register":
 	  return doregister($request ['fname'], $request['lname'], $request['email'], $request['password']);
     case "buy":
-      return buy($request['userid'], $request['quantity'], $request['symbol'], $request['name'], $request['currPrice'], $request['exchange'], $_SESSION['currBal']);
+      return buy($request['userid'], $request['quantity'], $request['symbol'], $request['name'], $request['currPrice'], $request['exchange'], $request['currBal']);
 
     case "validate_session":
       return doValidate($request['sessionId']);
