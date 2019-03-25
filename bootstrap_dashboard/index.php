@@ -1,7 +1,7 @@
 <?php
 session_start();
 $userid = $_SESSION['userid'];
-include('database.php');
+include('../database.php');
 
 $symbol = 'USD ($)';
 
