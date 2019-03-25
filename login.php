@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 session_start();
-
+include('database.php');
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
@@ -32,13 +32,8 @@ if ($response == 0 ) {
 	header("location:loginerror.html");
 }
 else {
-	$mydb = new mysqli('127.0.0.1','admin','password','stocks');
-	if ($mydb->errno != 0)
-	{
-	        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-	        exit(0);
-	}
-	echo "successfully connected to database".PHP_EOL;
+	global $mydb;
+	
 	$email = $_POST['email'];
 	$query = mysqli_query($mydb,"SELECT id FROM user WHERE email='$email'");
 	$user = mysqli_fetch_array($query,MYSQLI_ASSOC);
