@@ -540,7 +540,7 @@ $historyarray = json_decode($history_string, true);
         <div class="modal-body">
           <p>How many shares would you like to buy?</p>
           <div class="my-2"></div>
-          <form method="POST" action="buy.php">
+          <form method="POST" action="buyClient.php">
             <input type="number" name="buy" required>
             <input type="submit" class="btn btn-primary" value="Buy">
           </form>
