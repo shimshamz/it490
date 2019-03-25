@@ -3,80 +3,134 @@
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
+include('database.php');
 
-function doLogin($username,$password)
-{	
-$mydb = new mysqli('192.168.1.105','dbuser','pass1','testDb');
-
-if ($mydb->errno != 0)
+function doLogin($email, $password)
 {
-        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-        exit(0);
-}
-
-echo "successfully connected to database".PHP_EOL;
-	$query = mysqli_query($mydb,"SELECT * FROM testTable WHERE email = '$username' AND password = '$password' ");
-	$count = mysqli_num_rows($query);
-	//Check if credentials match the database
-	if ($count == 1){
-			//Match
-			echo "<br><br>USERS CREDENTIALS VERIFIED";
-			return true;
-		}else{
-			//No Match
+  global $mydb;
+  $query = mysqli_query($mydb, "SELECT * FROM user WHERE email = '$email' AND password = '$password'");
+  $count = mysqli_num_rows($query);
+  //Check if credentials match the database
+  if ($count == 1){
+  		//Match
+  		echo "<br><br>USERS CREDENTIALS VERIFIED";
+  		return true;
+  	}else{
+  		//No Match
                 	echo "<br><br>Mehta Suck!!!!";
         	        return false;
-		}
+  	}
 		
-if ($mydb->errno != 0)
+  if ($mydb->errno != 0)
+  {
+          echo "failed to execute query:".PHP_EOL;
+          echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+          exit(0);
+  }
+
+}
+
+
+function doregister($fname, $lname, $email, $password)
 {
-        echo "failed to execute query:".PHP_EOL;
-        echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
-        exit(0);
-}
+  global $mydb;
+  $query = mysqli_query($mydb,"SELECT * FROM user WHERE email = '$email'");
+  $count = mysqli_num_rows($query);
+
+  //Check if credentials match the database
+  if ($count == 1){
+    //Match
+    echo "<br><br>Please register with differernt email";
+    return true;
+  }else{
+    //No Match
+    $query = mysqli_query($mydb, "INSERT INTO user (fname, lname, email, password) VALUES ('$fname','$lname','$email','$password')");
+    $userQuery = mysqli_query($mydb, "SELECT id FROM user WHERE email = '$email'");
+    $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
+    $userid = $user['id'];
+
+    echo "<br><br>Register Successful!!!!";
+    return false;
+  }
+
+  if ($mydb->errno != 0)
+  {
+          echo "failed to execute query:".PHP_EOL;
+          echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
+          exit(0);
+  }
 
 }
 
+function buy($userid, $quantity, $symbol, $name, $currPrice, $exchange, $currBal) {
+  global $mydb;
 
-function doregister($fname,$lname,$email,$password)
-{
-$mydb = new mysqli('192.168.1.105','dbuser','pass1','testDb');
+  $totalBuyVal = $quantity * $currPrice;
 
-if ($mydb->errno != 0)
-{
-        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-        exit(0);
+  if ($totalBuyVal  > $currBal ) {
+    echo "Total buy amount exceeds balance available.";
+    return false;
+  }
+  else {
+    $newBal = $currBal - $totalBuyVal;
+    $portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = '$userid' AND company_symbol = '$symbol'");
+
+    if (mysqli_num_rows($portfolio_info) == 0) {
+      $query = mysqli_query($mydb,"INSERT INTO portfolio (user_id, company_symbol, company_name, total_value, total_volume, last_buy_price, last_buy_volume, last_sell_price, last_sell_volume, exchange) VALUES ('$userid', '$symbol', '$name', '$totalBuyVal', '$quantity', '$currPrice', '$quantity', NULL, NULL, '$exchange')");
+      $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
+    }
+    else {
+      $info = mysqli_fetch_array($portfolio_info, MYSQLI_ASSOC);
+      $portfolioId = $info['id'];
+      $currTotalVal = $info['total_value'];
+      $currVolume = $info['total_volume'];
+      $newTotalVal = $currTotalVal + $totalBuyVal;
+      $newVolume = $currVolume + $quantity;
+      $query = mysqli_query($mydb,"UPDATE portfolio SET total_value='$newTotalVal', total_volume='$newVolume', last_buy_price='$currPrice', last_buy_volume='$quantity' WHERE id='$portfolioId'");
+      $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
+    }
+    
+    echo "Transaction successful! New Balance = $$newBal";
+
+    return true;
+  }
 }
 
-echo "successfully connected to database".PHP_EOL;
+function sell($userid, $quantity, $symbol, $currPrice, $currBal) {
+  global $mydb;
 
-	$query = mysqli_query($mydb,"SELECT * FROM testTable WHERE email = '$email' AND password = '$password'");
-	$count = mysqli_num_rows($query);
+  $totalSellVal = $quantity * $currPrice;
+  $portfolio_info = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = '$userid' AND company_symbol = '$symbol'");
 
-        //Check if credentials match the database
-        if ($count == 1){
-                        //Match
-                        echo "<br><br>Please register with differernt email";
-                        return true;
-                }else{
-                        //No Match
-			$query = mysqli_query($mydb,"INSERT INTO testTable (firstname, lastname, email, password) VALUES ('$fname','$lname','$email','$password')");
+  if (mysqli_num_rows($portfolio_info) == 0) {
+    echo "Company does not exist in portfolio.";
+    return false;
+  }
+  else {
+    $info = mysqli_fetch_array($portfolio_info, MYSQLI_ASSOC);
+    $portfolioId = $info['id'];
+    $currTotalVal = $info['total_value'];
+    $currVolume = $info['total_volume'];
 
-			echo "<br><br>Register Successful!!!!";
-                        return false;
-                }
+    if ($quantity > $currVolume) {
+      echo "The quantity requested to sell exceeds the volume of shares available.";
+      return false;
+    }
+    else {
+      $newBal = $currBal + $totalSellVal;
+      $newTotalVal = $currTotalVal - $totalSellVal;
+        $newVolume = $currVolume - $quantity;
+      $query = mysqli_query($mydb,"UPDATE portfolio SET total_value='$newTotalVal', total_volume='$newVolume', last_sell_price='$currPrice', last_sell_volume='$quantity' WHERE id='$portfolioId'");
+      $user_info = mysqli_query($mydb,"UPDATE user SET balance = $newBal WHERE id='$userid'");
 
-if ($mydb->errno != 0)
-{
-        echo "failed to execute query:".PHP_EOL;
-        echo __FILE__.':'.__LINE__.":error: ".$mydb->error.PHP_EOL;
-        exit(0);
+      echo "Transaction successful! New Balance = $$newBal"; 
+
+      return true;
+    }
+   
+    
+  }
 }
-
-
-
-}
-
 
 function requestProcessor($request)
 {
@@ -89,10 +143,13 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "login":
-	    return doLogin($request['email'],$request['password']);
+	    return doLogin($request['email'], $request['password']);
     case "register":
-	  return doregister($request ['fname'],$request['lname'],$request['email'],$request['password']);
-
+	  return doregister($request ['fname'], $request['lname'], $request['email'], $request['password']);
+    case "buy":
+      return buy($request['userid'], $request['quantity'], $request['symbol'], $request['name'], $request['currPrice'], $request['exchange'], $request['currBal']);
+    case "sell":
+      return sell($request['userid'], $request['quantity'], $request['symbol'], $request['currPrice'], $request['currBal']);
 
     case "validate_session":
       return doValidate($request['sessionId']);

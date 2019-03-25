@@ -1,12 +1,12 @@
  #!/usr/bin/php
 <?php
+session_start();
 
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');
+$client = new rabbitMQClient("testRabbitMQ.ini","testServer");
 
-require_once('/home/it490/rabbitmqphp_example/path.inc');
-require_once('/home/it490/rabbitmqphp_example/get_host_info.inc');
-require_once('/home/it490/rabbitmqphp_example/rabbitMQLib.inc');
-
-$client = new rabbitMQClient("/home/it490/rabbitmqphp_example/testRabbitMQ.ini","testServer");
 if (isset($argv[1]))
 {
   $msg = $argv[1];
@@ -36,22 +36,12 @@ print_r($response);
 echo "\n\n";
 
 
-
-#$request = array();
-#$request['type'] = "register";
-#$request['fname'] = 'lol';
-#$request['lname'] = 'lol';
-#$request['email'] = '12@gmail.com';
-#$request['password'] = 'lol';
-#$request['message'] = $msg;
-#$response = $client->send_request($request);
-//$response = $client->publish($request);
-
-#echo "Client received respone  ".PHP_EOL;
-#print_r($response);
-#echo "\n\n";
-
-#echo $argv[0]." END".PHP_EOL;
+if ($response == 0 ) {
+	header("location: registersuccess.html");
+}
+else {
+	header("location: registererror.html");
+}
 
 
 ?>

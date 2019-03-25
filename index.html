@@ -10,18 +10,15 @@
 				padding: 0;
 				box-sizing: border-box;
 			}
-
 			body {
 				background-color: #333333;
 			}
-
 			.container {
 				height: 100vh;
 				display: flex;
 				align-items: center;
 				justify-content: space-around;
 			}
-
 			.login, .register {
 				width: 40%;
 				height: 450px;
@@ -33,27 +30,21 @@
 				align-items: center;
 				justify-content: center;
 			}
-
 			.login {
 				background-color: #b5d1ff;
 			}
-
 			.register {
 				background-color: #ccffa5;
 			}
-
 			h1 {
 				margin-bottom: 20px;
 			}
-
 			label, input {
 				display: block;
 			}
-
 			input {
 				margin-bottom: 10px;
 			}
-
 			.button {
 				padding: 5px 10px;
 			}
@@ -65,10 +56,10 @@
 			<h1>Login</h1>
 			<form method="post" action="login.php">
 				<label for="email">Email</label>
-				<input type="text" id="email" name="email">
+				<input type="email" id="email" name="email" required>
 
 				<label for="password">Password</label>
-				<input type="text" id="password" name="pass">
+				<input type="password" id="password" name="pass" required>
 
 				<input type="submit" class="button" value="Login">
 			</form>
@@ -78,16 +69,16 @@
 			<h1>Register</h1>
 			<form method="post" action="register.php">
 				<label for="firstname">First Name</label>
-				<input type="text" id="firstname" name="fname">
+				<input type="text" id="firstname" name="fname" required>
 
 				<label for="lastname">Last Name</label>
-				<input type="text" id="lastname" name="lname">
+				<input type="text" id="lastname" name="lname" required>
 
 				<label for="newemail">Email</label>
-				<input type="text" id="newemail" name="email">
+				<input type="email" id="username" name="email" required>
 
 				<label for="newpassword">Password</label>
-				<input type="text" id="newpassword" name="pass">
+				<input type="password" id="newpassword" name="pass" required>
 				
 				<input type="submit" class="button" value="Register">
 			</form>
@@ -95,4 +86,3 @@
 		</div>
 	</body>
 </html>
-
