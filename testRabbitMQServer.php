@@ -90,7 +90,7 @@ function buy($userid, $quantity, $symbol, $name, $currPrice, $exchange, $currBal
       $user_info = mysqli_query($mydb,"UPDATE user SET balance = '$newBal' WHERE id='$userid'");
     }
     
-    echo "Transaction successful! New Balance = $newBal";
+    echo "Transaction successful! New Balance = $$newBal";
 
     return true;
   }
@@ -123,7 +123,7 @@ function sell($userid, $quantity, $symbol, $currPrice, $currBal) {
       $query = mysqli_query($mydb,"UPDATE portfolio SET total_value='$newTotalVal', total_volume='$newVolume', last_sell_price='$currPrice', last_sell_volume='$quantity' WHERE id='$portfolioId'");
       $user_info = mysqli_query($mydb,"UPDATE user SET balance = $newBal WHERE id='$userid'");
 
-      echo "Transaction successful! New Balance = $newBal"); 
+      echo "Transaction successful! New Balance = $$newBal"); 
 
       return true;
     }
