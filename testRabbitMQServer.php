@@ -148,7 +148,7 @@ function requestProcessor($request)
 	  return doregister($request ['fname'], $request['lname'], $request['email'], $request['password']);
     case "buy":
       return buy($request['userid'], $request['quantity'], $request['symbol'], $request['name'], $request['currPrice'], $request['exchange'], $request['currBal']);
-    case: "sell":
+    case "sell":
       return sell($request['userid'], $request['quantity'], $request['symbol'], $request['currPrice'], $request['currBal']);
 
     case "validate_session":
