@@ -322,7 +322,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
 
           <div class="row">
 
-            <div class="col-xl-8 col-lg-7">
+            <div class="col-12">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">My Portfolio</h6>
@@ -372,19 +372,6 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 } 
                 ?>
 
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-4 col-lg-5">
-
-              <!-- Basic Card Example -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Suggested Videos</h6>
-                </div>
-                <div class="card-body">
-                  This is where the videos will go...
                 </div>
               </div>
             </div>
