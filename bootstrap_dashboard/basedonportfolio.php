@@ -1,16 +1,11 @@
 <?php
 session_start();
 $userid = $_SESSION['userid'];
+include('../database.php');
 
 $symbol = 'USD ($)';
 
-$mydb = new mysqli('127.0.0.1','admin','password','stocks');
-if ($mydb->errno != 0)
-{
-        echo "failed to connect to database: ". $mydb->error . PHP_EOL;
-        exit(0);
-}
-//echo "successfully connected to database".PHP_EOL;
+global $mydb;
 
 $userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = $userid");
 $user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
