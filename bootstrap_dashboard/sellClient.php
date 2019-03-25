@@ -31,10 +31,10 @@ print_r($response);
 echo "\n\n";
 
 if ($response == 0 ) {
-  echo "Transaction Error: \nEither the company does not exist in your portfolio \nOR \nThe quantity requested to sell exceeds the volume of shares available";
+  echo nl2br("Transaction Error: \n\nEither the company does not exist in your portfolio \nOR \nThe quantity requested to sell exceeds the volume of shares available");
 }
 else {
-  echo nl2br("Transaction successful! \n\nNew Balance = $newBal"); 
+  echo "Transaction successful!"; 
 }
 
 ?>

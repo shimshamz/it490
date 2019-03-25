@@ -36,7 +36,7 @@ if ($response == 0 ) {
   echo "Transaction Error: Total buy amount exceeds balance available.";
 }
 else {
-  echo "Transaction successful!<br><br>"; 
+  echo "Transaction successful!"; 
 }
 
 ?>
