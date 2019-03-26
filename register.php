@@ -37,9 +37,13 @@ echo "\n\n";
 
 
 if ($response == 0 ) {
+	$date = date_create();
+	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." User with email: ".$_POST['email']." registered successfully.", FILE_APPEND);
 	header("location: registersuccess.html");
 }
 else {
+	$date = date_create();
+	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." User with email: ".$_POST['email']." failed to register.", FILE_APPEND);
 	header("location: registererror.html");
 }
 
