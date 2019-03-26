@@ -30,7 +30,7 @@ echo "\n\n";
 
 if ($response == 0 ) {
 	$date = date_create();
-	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." Login error for user with email: ".$_POST['email'].". ", FILE_APPEND);
+	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." Login error for user with email: ".$_POST['email'].".\n", FILE_APPEND);
 	header("location:loginerror.html");
 }
 else {
@@ -41,7 +41,7 @@ else {
 	$user = mysqli_fetch_array($query,MYSQLI_ASSOC);
 	$_SESSION['userid'] = $user['id'];
 	$date = date_create();
-	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." User with email: ".$_POST['email']." logged in successfully.", FILE_APPEND);
+	file_put_contents('events.log', "[".date_format($date, 'm-d-Y H:i:s')."]"." User with email: ".$_POST['email']." logged in successfully.\n", FILE_APPEND);
 	header("Location: bootstrap_dashboard/index.php");
 }
 ?>
