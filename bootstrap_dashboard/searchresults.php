@@ -480,6 +480,45 @@ $historyarray = json_decode($history_string, true);
               <?php
               }
               ?>
+
+              <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                  <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>Latest News on $name ($symbol)</strong>"; ?></span>
+                </div>
+                <div class="card-body">
+
+                <?php 
+
+                  $feed = simplexml_load_file("https://news.google.com/rss/search?cf=all&pz=1&q=".$symbol." ".$name."&hl=en-US&gl=US&ceid=US:en");
+                  $items = $feed->channel;
+
+                  for ($i = 0; $i < 7; $i++) {
+                    $title = $items->item[$i]->title;
+                    $link = $items->item[$i]->link;
+                    $timeStamp = $items->item[$i]->pubDate;
+                    $localTime = date('M d, Y', strtotime($timeStamp));
+                    $source = $items->item[$i]->source;
+                ?>
+
+                    <div class="card shadow my-1">
+                      <div class="card-body">
+                        <a class="btn btn-link font-weight-bold" href="<?php echo $link; ?>"><?php echo $title; ?></a>
+                        <p class="text-muted mb-1 ml-3"><?php echo $source; ?></p>
+                        <small class="text-muted mb-1 ml-3"><?php echo "Published: $localTime"; ?></small>
+                      </div>
+                    </div>
+
+                <?php
+                  }
+                ?>
+
+                  <div class="row">
+                    <div class="col-12">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
         </div>
 
         <!-- /.container-fluid -->
