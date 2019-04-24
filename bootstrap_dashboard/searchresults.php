@@ -512,10 +512,6 @@ $historyarray = json_decode($history_string, true);
                   }
                 ?>
 
-                  <div class="row">
-                    <div class="col-12">
-                    </div>
-                  </div>
                 </div>
               </div>
 
