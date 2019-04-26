@@ -398,7 +398,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 ?>
                       <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                          <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>Latest News on $item['company_name'] ($item['company_symbol'])</strong>"; ?></span>
+                          <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>Latest News on".$item['company_name']." "."(".$item['company_symbol'].")"."</strong>"; ?></span>
                         </div>
                         <div class="card-body">
 
