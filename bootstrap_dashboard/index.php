@@ -400,18 +400,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                         </div>
                         <div class="card-body">
 
-                        <?php 
-
-                          $feed = simplexml_load_file("https://news.google.com/rss/search?cf=all&pz=1&q=".$item['company_symbol']." ".$item['company_name']."&hl=en-US&gl=US&ceid=US:en");
-                          $items = $feed->channel;
-
-                          for ($i = 0; $i < 3; $i++) {
-                            $title = $items->item[$i]->title;
-                            $link = $items->item[$i]->link;
-                            $timeStamp = $items->item[$i]->pubDate;
-                            $localTime = date('M d, Y', strtotime($timeStamp));
-                            $source = $items->item[$i]->source;
-                        ?>
+              
 
                             <div class="card shadow my-1">
                               <div class="card-body">
