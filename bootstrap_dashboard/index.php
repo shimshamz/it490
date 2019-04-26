@@ -394,11 +394,9 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 else {
                     foreach ($portfolioItems as $item) {
                 ?>
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                  
                           <span class="m-0 font-weight-bold text-primary"><?php echo $item['company_name']." "."(".$item['company_symbol'].")".""; ?></span>
-                        </div>
-                        <div class="card-body">
+
 
                         <?php 
 
@@ -424,9 +422,6 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                         <?php
                           }
                         ?>
-
-                        </div>
-                      </div>
 
                 <?php
                     }
