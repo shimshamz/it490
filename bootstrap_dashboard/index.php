@@ -391,14 +391,42 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 if ($rowCount == 0) {
                   echo "<p>No news to display.</p>"; 
                 }
-                else { 
-                    $pItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
-
-                    foreach ($pItems as $item) {
-
-                      echo $item['company_symbol'];
+                else {
+                    foreach ($portfolioItems as $item) {
                 ?>
-                      
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                          <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>Latest News on".$item['company_name']." "."(".$item['company_symbol'].")"."</strong>"; ?></span>
+                        </div>
+                        <div class="card-body">
+
+                        <?php 
+
+                          $feed = simplexml_load_file("https://news.google.com/rss/search?cf=all&pz=1&q=".$item['company_symbol']." ".$item['company_name']."&hl=en-US&gl=US&ceid=US:en");
+                          $items = $feed->channel;
+
+                          for ($i = 0; $i < 3; $i++) {
+                            $title = $items->item[$i]->title;
+                            $link = $items->item[$i]->link;
+                            $timeStamp = $items->item[$i]->pubDate;
+                            $localTime = date('M d, Y', strtotime($timeStamp));
+                            $source = $items->item[$i]->source;
+                        ?>
+
+                            <div class="card shadow my-1">
+                              <div class="card-body">
+                                <a class="btn btn-link font-weight-bold" href="<?php echo $link; ?>"><?php echo $title; ?></a>
+                                <p class="text-muted mb-1 ml-3"><?php echo $source; ?></p>
+                                <small class="text-muted mb-1 ml-3"><?php echo "Published: $localTime"; ?></small>
+                              </div>
+                            </div>
+
+                        <?php
+                          }
+                        ?>
+
+                        </div>
+                      </div>
 
                 <?php
                     }
