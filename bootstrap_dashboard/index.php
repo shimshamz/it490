@@ -402,10 +402,8 @@ $rowCount = mysqli_num_rows($portfolioQuery);
 
                         <?php 
 
-                          echo "https://news.google.com/rss/search?cf=all&pz=1&q=".$item['company_symbol']." ".$item['company_name']."&hl=en-US&gl=US&ceid=US:en";
                           $feed = simplexml_load_file("https://news.google.com/rss/search?cf=all&pz=1&q=".$item['company_symbol']." ".$item['company_name']."&hl=en-US&gl=US&ceid=US:en");
                           $items = $feed->channel;
-                          print_r($items);
 
                           for ($i = 0; $i < 3; $i++) {
                             $title = $items->item[$i]->title;
