@@ -393,30 +393,12 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                 }
                 else {
                     foreach ($portfolioItems as $item) {
+
+                      echo $item['company_name'];
                 ?>
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                          <span class="m-0 font-weight-bold text-primary"><?php echo "<strong>Latest News on".$item['company_name']." "."(".$item['company_symbol'].")"."</strong>"; ?></span>
-                        </div>
-                        <div class="card-body">
+                      
 
-              
-
-                            <div class="card shadow my-1">
-                              <div class="card-body">
-                                <a class="btn btn-link font-weight-bold" href="<?php echo $link; ?>"><?php echo $title; ?></a>
-                                <p class="text-muted mb-1 ml-3"><?php echo $source; ?></p>
-                                <small class="text-muted mb-1 ml-3"><?php echo "Published: $localTime"; ?></small>
-                              </div>
-                            </div>
-
-                        <?php
-                          }
-                        ?>
-
-                        </div>
-                      </div>
-
+                        
                 <?php
                     }
                 ?>       
