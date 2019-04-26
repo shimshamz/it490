@@ -392,9 +392,9 @@ $rowCount = mysqli_num_rows($portfolioQuery);
                   echo "<p>No news to display.</p>"; 
                 }
                 else { 
-                    $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
+                    $pItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
 
-                    foreach ($portfolioItems as $item) {
+                    foreach ($pItems as $item) {
 
                       echo $item['company_symbol'];
                 ?>
