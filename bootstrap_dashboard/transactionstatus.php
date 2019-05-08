@@ -281,7 +281,7 @@ $status = $_SESSION['transactionStatus'];
               <div class="card shadow mb-4">
                 <div class="card-body">
                 <?php if (isset($status)) { ?>
-                  <p><?php echo $status; ?></p>
+                  <p class="text-lg mb-0"><?php echo $status; ?></p>
                 <?php } else { ?>
                   <p class="text-lg mb-0"><?php echo "Error: No transaction has occured."; ?></p>
                 <?php } ?>
