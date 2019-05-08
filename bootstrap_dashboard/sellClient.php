@@ -31,10 +31,14 @@ print_r($response);
 echo "\n\n";
 
 if ($response == 0 ) {
-  echo nl2br("Transaction Error: \n\nEither the company does not exist in your portfolio \nOR \nThe quantity requested to sell exceeds the volume of shares available");
+  $status = nl2br("Transaction Error: \n\nEither the company does not exist in your portfolio \nOR \nThe quantity requested to sell exceeds the volume of shares available");
+  $_SESSION['transactionStatus'] = $status;
+  header('Location: transactionstatus.php');
 }
 else {
-  echo "Transaction successful!"; 
+  $status = "Transaction successful!";
+  $_SESSION['transactionStatus'] = $status;
+  header('Location: transactionstatus.php');
 }
 
 ?>

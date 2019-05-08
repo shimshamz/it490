@@ -33,10 +33,14 @@ print_r($response);
 echo "\n\n";
 
 if ($response == 0 ) {
-  echo "Transaction Error: Total buy amount exceeds balance available.";
+  $status = "Transaction Error: Total buy amount exceeds balance available.";
+  $_SESSION['transactionStatus'] = $status;
+  header('Location: transactionstatus.php');
 }
 else {
-  echo "Transaction successful!"; 
+  $status = "Transaction successful!";
+  $_SESSION['transactionStatus'] = $status;
+  header('Location: transactionstatus.php');
 }
 
 ?>
