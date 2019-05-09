@@ -15,5 +15,5 @@ create database stocks;
 	use stocks;
 	create TABLE deploy
 		(
-			bundle_name varchar, bundle_version varchar(10)
+			bundle_name varchar(255), bundle_version varchar(10)
 		);
