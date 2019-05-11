@@ -1,19 +1,7 @@
 <?php
 session_start();
 $userid = $_SESSION['userid'];
-include('../database.php');
-
-$symbol = 'USD ($)';
-
-global $mydb;
-
-$userQuery = mysqli_query($mydb,"SELECT * FROM user WHERE id = $userid");
-$user = mysqli_fetch_array($userQuery, MYSQLI_ASSOC);
-$currBal = $user['balance'];
-$_SESSION['currBal'] = $currBal;
-
-$portfolioQuery = mysqli_query($mydb,"SELECT * FROM portfolio WHERE user_id = $userid ORDER BY company_name ASC");
-$rowCount = mysqli_num_rows($portfolioQuery);
+$status = $_SESSION['transactionStatus'];
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +15,7 @@ $rowCount = mysqli_num_rows($portfolioQuery);
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Dashboard</title>
+  <title>Transaction Status</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -283,159 +271,20 @@ $rowCount = mysqli_num_rows($portfolioQuery);
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Currency: <span class="currCurrency"><?php echo $symbol; ?></span>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button class="dropdown-item" onclick="currConverter('usd')">USD ($)</button>
-                <button class="dropdown-item" onclick="currConverter('gbp')">GBP (&pound;)</button>
-                <button class="dropdown-item" onclick="currConverter('eur')">EUR (&euro;)</button>
-              </div>
-            </div>
+            <h1 class="h3 mb-0 text-gray-800">Transaction Status</h1>
           </div>
 
           <!-- Content Row -->
           <div class="row">
 
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-4 col-md-6 mb-4 ml-auto">
-              <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Balance</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><span class="symbol">$</span><span class="money"><?php echo "$currBal"; ?></span></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Content Row -->
-
-          <div class="row">
-
             <div class="col-12">
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">My Portfolio</h6>
-                </div>
                 <div class="card-body">
-
-                <?php 
-                if ($rowCount == 0) {
-                  echo "<p>Your portfolio is currently empty.</p>"; 
-                }
-                else { 
-                    $portfolioItems = mysqli_fetch_all($portfolioQuery, MYSQLI_ASSOC);
-                ?>
-
-                  <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <thead>
-                        <tr>
-                          <th>Symbol</th>
-                          <th>Company Name</th>
-                          <th>Total Value</th>
-                          <th>Total Volume</th>
-                          <th>Last Buy Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                        <?php
-                        foreach ($portfolioItems as $item) { 
-                          ?>
-                          <tr>
-                            <td><?php echo $item['company_symbol']; ?></td>
-                            <td><?php echo $item['company_name']; ?></td>
-                            <td><span class="symbol">$</span><span class="money"><?php echo $item['total_value']; ?></span></td>
-                            <td><?php echo $item['total_volume']; ?></td>
-                            <td><span class="symbol">$</span><span class="money"><?php echo $item['last_buy_price']; ?></span></td>
-                          </tr>
-                        <?php
-                        }
-                        ?>
-
-                      </tbody>
-                    </table>
-                  </div>
-
-                <?php 
-                } 
-                ?>
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="row">
-
-            <div class="col-12">
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Latest Relevant News</h6>
-                </div>
-                <div class="card-body">
-
-                <?php 
-                if ($rowCount == 0) {
-                  echo "<p>No news to display.</p>"; 
-                }
-                else {
-                    foreach ($portfolioItems as $item) {
-                ?>
-                      <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                          <span class="m-0 font-weight-bold text-primary"><?php echo $item['company_name']." "."(".$item['company_symbol'].")".""; ?></span>
-                        </div>
-                        <div class="card-body">
-
-                        <?php 
-
-                          $feed = simplexml_load_file("https://news.google.com/rss/search?cf=all&pz=1&q=".$item['company_symbol']." ".$item['company_name']."&hl=en-US&gl=US&ceid=US:en");
-                          $items = $feed->channel;
-
-                          for ($i = 0; $i < 2; $i++) {
-                            $title = $items->item[$i]->title;
-                            $link = $items->item[$i]->link;
-                            $timeStamp = $items->item[$i]->pubDate;
-                            $localTime = date('M d, Y', strtotime($timeStamp));
-                            $source = $items->item[$i]->source;
-                        ?>
-
-                            <div class="card shadow my-1">
-                              <div class="card-body">
-                                <a class="btn btn-link font-weight-bold" href="<?php echo $link; ?>"><?php echo $title; ?></a>
-                                <p class="text-muted mb-1 ml-3"><?php echo $source; ?></p>
-                                <small class="text-muted mb-1 ml-3"><?php echo "Published: $localTime"; ?></small>
-                              </div>
-                            </div>
-
-                        <?php
-                          }
-                        ?>
-
-                        </div>
-                      </div>
-
-                <?php
-                    }
-                ?>       
-
-                <?php 
-                } 
-                ?>
-
+                <?php if (isset($status)) { ?>
+                  <p class="text-lg mb-0"><?php echo $status; ?></p>
+                <?php } else { ?>
+                  <p class="text-lg mb-0"><?php echo "Error: No transaction has occured."; ?></p>
+                <?php } ?>
                 </div>
               </div>
             </div>
