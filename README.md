@@ -25,6 +25,8 @@ Assuming that you have your VirtualBox VM up and running, with all the required 
 ## 3rd Party Data Source
 Special thanks goes to Barchart for their API. For more information, visit their website [here](https://www.barchart.com/ondemand/api "Barchart API").
 
+## [Video Overview](https://mediaspace.njit.edu/media/IT490_ProjectVideo/1_qyjya0of "IT490_Project")
+
 ## Team Five Members
 * Parthkumar Patel
 * Shashwat Patel
